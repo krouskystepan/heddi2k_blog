@@ -3,19 +3,30 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --red: #b92056;
+  --orange: #e85627;
+  --yellow: #f0b54d;
+  --green: #67b9a9;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --purple: #682957;
+  --blue: #2b5983;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  cursor: url('/cursor.png') 32 32, auto;
+}
+
+.font-glory {
+  font-family: var(--font-give-you-glory);
+}
+
+.font-creepster {
+  font-family: var(--font-creepster);
+}
+
+.font-eater {
+  font-family: var(--font-eater);
+}
+.font-schoolbell {
+  font-family: var(--font-schoolbell);
 }
