@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Give_You_Glory, Creepster, Eater, Schoolbell } from 'next/font/google'
 import './globals.css'
+import Providers from '@/providers/Providers'
 
 export const metadata: Metadata = {
   title: 'Barbieho Mňaminky',
@@ -37,11 +38,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="min-h-100dvh bg-green-background">
+    <html lang="en">
       <body
         className={`${giveYouGlory.variable} ${creepster.variable} ${schoolbell.variable} ${eater.variable} antialiased`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   )
