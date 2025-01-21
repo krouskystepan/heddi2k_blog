@@ -29,6 +29,24 @@ export const createPost = async ({
   }
 }
 
+export const deletePost = async (id: string) => {
+  try {
+    const session = await getServerSession()
+    if (!session?.user?.name) {
+      throw new Error('Not logged in')
+    }
+
+    await connectToDatabase()
+
+    await Post.findByIdAndDelete(id)
+    console.log(`Post '${id}' deleted`)
+
+    revalidatePath('/')
+  } catch (error) {
+    console.error('Error deleting post:', error)
+  }
+}
+
 export const getPosts = async () => {
   try {
     await connectToDatabase()

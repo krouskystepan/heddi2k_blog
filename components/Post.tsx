@@ -2,15 +2,20 @@
 
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { deletePost } from '@/actions/post.action'
 
 export default function Post({
+  id,
   title,
   description,
   createdAt,
+  isLoggedIn,
 }: {
+  id: string
   title: string
   description: string
   createdAt: Date
+  isLoggedIn: boolean
 }) {
   const [randomStyles, setRandomStyles] = useState({
     rotate: 0,
@@ -38,9 +43,15 @@ export default function Post({
 
   const formattedDate = new Date(createdAt).toLocaleDateString('cs-CZ')
 
+  const handleDelete = async () => {
+    if (window.confirm('Opravdu to chceš smazat?')) {
+      await deletePost(id)
+    }
+  }
+
   return (
     <motion.div
-      className="p-4 rounded-lg shadow-md overflow-hidden"
+      className="relative p-4 rounded-lg shadow-md overflow-hidden"
       style={{
         backgroundColor: randomStyles.backgroundColor,
         borderColor: randomStyles.borderColor,
@@ -59,6 +70,7 @@ export default function Post({
         boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.5)',
         backgroundColor: `hsl(${Math.random() * 360}, 80%, 80%)`,
         borderColor: `hsl(${Math.random() * 360}, 80%, 50%)`,
+        zIndex: 100,
       }}
       transition={{
         scale: { duration: 0.3 },
@@ -70,6 +82,14 @@ export default function Post({
         borderColor: { duration: 0.3 },
       }}
     >
+      {isLoggedIn && (
+        <button
+          className="absolute top-2 right-2 bg-rose-600 text-white rounded-md aspect-square size-6 flex justify-center items-center"
+          onClick={() => handleDelete()}
+        >
+          x
+        </button>
+      )}
       <h5 className="font-creepster text-3xl text-center text-white break-words">
         {title}
       </h5>

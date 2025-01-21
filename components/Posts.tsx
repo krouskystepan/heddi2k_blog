@@ -1,9 +1,11 @@
 import React from 'react'
 import Post from './Post'
 import { getPosts } from '@/actions/post.action'
+import { getServerSession } from 'next-auth'
 
 export default async function Posts() {
   const posts = await getPosts()
+  const session = await getServerSession()
 
   return (
     <section className="bg-blue mb-8">
@@ -14,9 +16,11 @@ export default async function Posts() {
         {posts?.map((post) => (
           <div key={post.id}>
             <Post
+              id={post.id}
               title={post.title}
               description={post.description}
               createdAt={post.createdAt}
+              isLoggedIn={!!session?.user?.name}
             />
           </div>
         ))}
