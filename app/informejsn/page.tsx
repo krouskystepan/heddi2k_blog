@@ -45,13 +45,22 @@ export default function Informejsn() {
                 {info.text}
               </p>
             </div>
-            <Image
-              src={info.image}
-              width={270}
-              height={360}
-              alt={`photo${index}`}
-              className="size-auto"
-            />
+            {info.media.type === 'image' && (
+              <Image
+                src={info.media.source}
+                width={270}
+                height={360}
+                alt={`photo${index}`}
+                className="size-auto"
+              />
+            )}
+            {info.media.type === 'video' && (
+              <video
+                src={info.media.source}
+                controls
+                className="size-auto w-[270px] h-[360px]"
+              />
+            )}
           </div>
         ))}
       </section>
