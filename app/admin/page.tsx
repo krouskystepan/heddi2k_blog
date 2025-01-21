@@ -53,7 +53,13 @@ export default function AdminPage() {
 
   return (
     <main>
-      <div className="flex justify-center my-3">
+      <div className="flex justify-center my-3 gap-4">
+        <button
+          className="bg-emerald-500 px-4 py-2 rounded-lg m-2"
+          onClick={() => rounter.push('/')}
+        >
+          Zpatky na lednicku
+        </button>
         <button
           className="bg-rose-500 px-4 py-2 rounded-lg m-2"
           onClick={() =>
