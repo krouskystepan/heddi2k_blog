@@ -19,6 +19,7 @@ export default async function Posts() {
               id={post.id}
               title={post.title}
               description={post.description}
+              imageLink={post.imageLink}
               createdAt={post.createdAt}
               isLoggedIn={!!session?.user?.name}
             />

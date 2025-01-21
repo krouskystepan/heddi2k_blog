@@ -8,12 +8,14 @@ export default function Post({
   id,
   title,
   description,
+  imageLink,
   createdAt,
   isLoggedIn,
 }: {
   id: string
   title: string
   description: string
+  imageLink: string
   createdAt: Date
   isLoggedIn: boolean
 }) {
@@ -51,7 +53,7 @@ export default function Post({
 
   return (
     <motion.div
-      className="relative p-4 rounded-lg shadow-md overflow-hidden"
+      className={`relative rounded-lg shadow-md overflow-hidden p-4`}
       style={{
         backgroundColor: randomStyles.backgroundColor,
         borderColor: randomStyles.borderColor,
@@ -94,6 +96,8 @@ export default function Post({
         {title}
       </h5>
       <Divider />
+      {/* eslint-disable @next/next/no-img-element */}
+      {imageLink && <img src={imageLink} alt={title || 'Image'} />}
       <p className="font-mynerve my-2 text-red text-2xl font-bold hover:text-blue-500 break-words">
         {description}
       </p>

@@ -3,6 +3,7 @@ import { Schema, model, models, Document } from 'mongoose'
 export interface IPost extends Document {
   title: string
   description: string
+  imageLink: string
   createdAt: Date
   updatedAt: Date
 }
@@ -16,6 +17,9 @@ const PostSchema = new Schema(
     description: {
       type: String,
       required: true,
+    },
+    imageLink: {
+      type: String,
     },
   },
   {

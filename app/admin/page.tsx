@@ -10,6 +10,7 @@ import { signOut } from 'next-auth/react'
 const postSchema = z.object({
   title: z.string().min(1, 'Povinné').max(100, 'Max 100 znaků'),
   description: z.string().min(1, 'Povinné').max(500, 'max 500 znaků'),
+  imageLink: z.string().optional(),
 })
 
 export default function AdminPage() {
@@ -18,9 +19,11 @@ export default function AdminPage() {
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [imageLink, setImageLink] = useState('')
   const [errors, setErrors] = useState<{
     title?: string
     description?: string
+    imageLink?: string
   }>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -40,7 +43,7 @@ export default function AdminPage() {
 
       try {
         setIsSubmitting(true)
-        await createPost({ title, description })
+        await createPost({ title, description, imageLink })
         console.log('Post created successfully')
         rounter.push('/')
       } catch (error) {
@@ -121,6 +124,27 @@ export default function AdminPage() {
                 <p className="text-rose-500 text-sm m-2">
                   {errors.description}
                 </p>
+              )}
+            </div>
+
+            <div>
+              <label
+                className="block text-white font-semibold text-lg"
+                htmlFor="imageLink"
+              >
+                Odkaz na fotku (link) - nepovinné
+              </label>
+              <input
+                id="imageLink"
+                type="text"
+                value={imageLink}
+                onChange={(e) => setImageLink(e.target.value)}
+                className={`w-full p-2 mt-1 rounded-lg ${
+                  errors.title ? 'border-rose-500' : ''
+                }`}
+              />
+              {errors.imageLink && (
+                <p className="text-rose-500 text-sm m-2">{errors.imageLink}</p>
               )}
             </div>
 

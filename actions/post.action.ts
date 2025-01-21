@@ -8,9 +8,11 @@ import { revalidatePath } from 'next/cache'
 export const createPost = async ({
   title,
   description,
+  imageLink,
 }: {
   title: string
   description: string
+  imageLink?: string
 }) => {
   try {
     const session = await getServerSession()
@@ -20,7 +22,7 @@ export const createPost = async ({
 
     await connectToDatabase()
 
-    await Post.create({ title, description })
+    await Post.create({ title, description, imageLink })
     console.log(`Post '${title}' created`)
 
     revalidatePath('/')
