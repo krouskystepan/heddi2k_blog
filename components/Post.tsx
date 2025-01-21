@@ -90,7 +90,7 @@ export default function Post({
           x
         </button>
       )}
-      <h5 className="font-creepster text-3xl text-center text-white break-words">
+      <h5 className="font-eater text-3xl text-center text-white break-words">
         {title}
       </h5>
       <Divider />
