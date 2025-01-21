@@ -25,6 +25,11 @@ export default async function Posts() {
           </div>
         ))}
       </section>
+      {posts?.length === 0 && (
+        <p className="text-center text-5xl text-yellow font-bold font-schoolbell">
+          Nic tu zatim neni, ale brzy bude!
+        </p>
+      )}
     </section>
   )
 }
