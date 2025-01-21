@@ -69,7 +69,7 @@ export default function AdminPage() {
               className="block text-white font-semibold text-lg"
               htmlFor="title"
             >
-              Název myšlenky
+              Název myšlenky (max 100 znaků)
             </label>
             <input
               id="title"
@@ -90,7 +90,7 @@ export default function AdminPage() {
               className="block text-white font-semibold text-lg"
               htmlFor="description"
             >
-              Co právě pociťuješ?
+              Co právě pociťuješ? (max 500 znaků)
             </label>
             <textarea
               id="description"

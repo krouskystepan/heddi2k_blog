@@ -33,7 +33,7 @@ export const getPosts = async () => {
   try {
     await connectToDatabase()
 
-    const posts = await Post.find()
+    const posts = await Post.find().sort({ createdAt: -1 })
     return posts
   } catch (error) {
     console.error('Error getting posts:', error)

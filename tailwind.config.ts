@@ -17,6 +17,19 @@ export default {
         purple: 'var(--purple)',
         blue: 'var(--blue)',
       },
+      animation: {
+        'stripe-move': 'stripeMove 2s linear infinite',
+      },
+      keyframes: {
+        stripeMove: {
+          '0%': {
+            backgroundPosition: '0 0',
+          },
+          '100%': {
+            backgroundPosition: '0 60px',
+          },
+        },
+      },
     },
   },
   plugins: [],

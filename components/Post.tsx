@@ -40,7 +40,7 @@ export default function Post({
 
   return (
     <motion.div
-      className="p-4 rounded-lg shadow-md"
+      className="p-4 rounded-lg shadow-md overflow-hidden"
       style={{
         backgroundColor: randomStyles.backgroundColor,
         borderColor: randomStyles.borderColor,
@@ -70,7 +70,7 @@ export default function Post({
         borderColor: { duration: 0.3 },
       }}
     >
-      <h5 className="font-creepster text-3xl text-center text-white">
+      <h5 className="font-creepster text-3xl text-center text-white break-words">
         {title}
       </h5>
       <Divider />
