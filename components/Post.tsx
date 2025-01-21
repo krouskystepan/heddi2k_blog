@@ -32,7 +32,7 @@ export default function Post({
   useEffect(() => {
     setRandomStyles({
       rotate: Math.random() * 20 - 10,
-      scale: Math.random() * 0.3 + 0.85,
+      scale: Math.random() * 0.2 + 0.85,
       y: Math.random() * 50,
       backgroundColor: `hsl(${Math.random() * 360}, 80%, 70%)`,
       borderColor: `hsl(${Math.random() * 360}, 80%, 50%)`,
@@ -67,7 +67,7 @@ export default function Post({
         scale: randomStyles.scale,
       }}
       whileHover={{
-        scale: 1.2,
+        scale: 1,
         rotate: 0,
         boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.5)',
         backgroundColor: `hsl(${Math.random() * 360}, 80%, 80%)`,
@@ -97,7 +97,13 @@ export default function Post({
       </h5>
       <Divider />
       {/* eslint-disable @next/next/no-img-element */}
-      {imageLink && <img src={imageLink} alt={title || 'Image'} />}
+      {imageLink && (
+        <img
+          src={imageLink}
+          alt={title || 'Image'}
+          className="w-full h-auto object-cover rounded-lg shadow-lg"
+        />
+      )}
       <p className="font-mynerve my-2 text-red text-2xl font-bold hover:text-blue-500 break-words">
         {description}
       </p>
