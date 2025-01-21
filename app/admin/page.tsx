@@ -74,7 +74,7 @@ export default function AdminPage() {
           {session.data?.user?.name === 'Admin' && (
             <h1 className="texy-yellow text-6xl">BUH</h1>
           )}
-          <h2 className="text-yellow font-schoolbell text-5xl max-h-fit">
+          <h2 className="text-yellow font-mynerve text-5xl max-h-fit">
             Přidej si myšlenku zmrde
           </h2>
           <form

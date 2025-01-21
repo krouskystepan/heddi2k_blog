@@ -38,7 +38,7 @@ export default function Informejsn() {
             className="flex gap-6 flex-col md:flex-row md:even:flex-row-reverse "
           >
             <div className="flex flex-col gap-2 justify-center">
-              <h6 className="text-5xl font-schoolbell font-extrabold text-center text-green">
+              <h6 className="text-5xl font-mynerve font-extrabold text-center text-green">
                 {info.title}
               </h6>
               <p className="text-center text-yellow font-glory text-3xl font-bold tracking-widest leading-relaxed">

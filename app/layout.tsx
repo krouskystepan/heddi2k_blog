@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Give_You_Glory, Creepster, Eater, Schoolbell } from 'next/font/google'
+import { Give_You_Glory, Creepster, Eater, Mynerve } from 'next/font/google'
 import './globals.css'
 import Providers from '@/providers/Providers'
 
@@ -20,10 +20,10 @@ const creepster = Creepster({
   variable: '--font-creepster',
 })
 
-const schoolbell = Schoolbell({
+const mynerve = Mynerve({
   subsets: ['latin'],
   weight: '400',
-  variable: '--font-schoolbell',
+  variable: '--font-mynerve',
 })
 
 const eater = Eater({
@@ -40,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${giveYouGlory.variable} ${creepster.variable} ${schoolbell.variable} ${eater.variable} antialiased`}
+        className={`${giveYouGlory.variable} ${creepster.variable} ${mynerve.variable} ${eater.variable} antialiased`}
       >
         <Providers>{children}</Providers>
       </body>

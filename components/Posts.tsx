@@ -26,7 +26,7 @@ export default async function Posts() {
         ))}
       </section>
       {posts?.length === 0 && (
-        <p className="text-center text-5xl text-yellow font-bold font-schoolbell">
+        <p className="text-center text-5xl text-yellow font-bold font-mynerve">
           Nic tu zatim neni, ale brzy bude!
         </p>
       )}

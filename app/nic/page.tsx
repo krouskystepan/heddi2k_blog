@@ -25,7 +25,7 @@ export default function Nic() {
           TADY NIC NENI
         </motion.h1>
         <motion.h1
-          className="text-6xl font-bold text-green font-schoolbell"
+          className="text-6xl font-bold text-green font-mynerve"
           animate={{ rotate: 360 }}
           transition={{
             repeat: Infinity,

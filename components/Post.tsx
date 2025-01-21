@@ -94,7 +94,7 @@ export default function Post({
         {title}
       </h5>
       <Divider />
-      <p className="font-schoolbell my-2 text-red text-2xl font-bold hover:text-blue-500 break-words">
+      <p className="font-mynerve my-2 text-red text-2xl font-bold hover:text-blue-500 break-words">
         {description}
       </p>
       <p className="text-right">{formattedDate}</p>
