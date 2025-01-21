@@ -18,8 +18,6 @@ const options = {
 
         if (!admin) return null
 
-        console.log('admin', admin)
-
         const isPasswordValid = await bcrypt.compare(
           credentials.password,
           admin.password
