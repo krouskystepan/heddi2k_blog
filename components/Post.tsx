@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { deletePost } from '@/actions/post.action'
+import { Pen, X } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 export default function Post({
   id,
@@ -19,6 +21,7 @@ export default function Post({
   createdAt: Date
   isLoggedIn: boolean
 }) {
+  const router = useRouter()
   const [randomStyles, setRandomStyles] = useState({
     rotate: 0,
     scale: 1,
@@ -84,14 +87,6 @@ export default function Post({
         borderColor: { duration: 0.3 },
       }}
     >
-      {isLoggedIn && (
-        <button
-          className="absolute top-2 right-2 bg-rose-600 text-white rounded-md aspect-square size-6 flex justify-center items-center"
-          onClick={() => handleDelete()}
-        >
-          x
-        </button>
-      )}
       <h5 className="font-eater text-3xl text-center text-white break-words">
         {title}
       </h5>
@@ -107,7 +102,27 @@ export default function Post({
       <p className="font-mynerve my-2 text-red text-2xl font-bold hover:text-blue-500 break-words">
         {description}
       </p>
-      <p className="text-right">{formattedDate}</p>
+      <section className="flex justify-between items-center">
+        <div className="flex gap-2">
+          {isLoggedIn && (
+            <>
+              <button
+                className="bg-rose-600 text-white rounded-md aspect-square flex justify-center items-center p-1"
+                onClick={() => handleDelete()}
+              >
+                <X size={20} />
+              </button>
+              <button
+                className="bg-amber-600 text-white rounded-md aspect-square flex justify-center items-center p-1"
+                onClick={() => router.push(`/admin/${id}`)}
+              >
+                <Pen size={20} />
+              </button>
+            </>
+          )}
+        </div>
+        <p className="text-right">{formattedDate}</p>
+      </section>
     </motion.div>
   )
 }
