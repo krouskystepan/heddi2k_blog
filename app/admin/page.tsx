@@ -15,7 +15,7 @@ const postSchema = z.object({
 
 export default function AdminPage() {
   const session = useSession()
-  const rounter = useRouter()
+  const router = useRouter()
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -30,22 +30,25 @@ export default function AdminPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const result = postSchema.safeParse({ title, description })
+    const result = postSchema.safeParse({ title, description, imageLink })
 
     if (!result.success) {
-      const newErrors: { title?: string; description?: string } = {}
+      const newErrors: {
+        title?: string
+        description?: string
+        imageLink?: string
+      } = {}
       result.error.errors.forEach((err) => {
         newErrors[err.path[0] as keyof typeof newErrors] = err.message
       })
       setErrors(newErrors)
     } else {
       setErrors({})
-
       try {
         setIsSubmitting(true)
         await createPost({ title, description, imageLink })
         console.log('Post created successfully')
-        rounter.push('/')
+        router.push('/')
       } catch (error) {
         console.error('Error creating post:', error)
       } finally {
@@ -59,7 +62,7 @@ export default function AdminPage() {
       <div className="flex justify-center my-3 gap-4">
         <button
           className="bg-emerald-500 px-4 py-2 rounded-lg m-2"
-          onClick={() => rounter.push('/')}
+          onClick={() => router.push('/')}
         >
           Zpatky na lednicku
         </button>
@@ -150,9 +153,9 @@ export default function AdminPage() {
 
             <button
               type="submit"
-              disabled={isSubmitting || Object.keys(errors).length > 0}
+              disabled={isSubmitting}
               className={`bg-yellow text-white px-4 py-2 rounded-lg mt-3 ${
-                isSubmitting ? 'opacity-50' : ''
+                isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >
               {isSubmitting ? 'Odesílám...' : 'Odeslat do světa'}

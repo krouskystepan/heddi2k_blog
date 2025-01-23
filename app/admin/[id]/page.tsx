@@ -57,6 +57,8 @@ export default function EditPost({
     fetchPost()
   }, [id, router])
 
+  console.log(errors)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -68,9 +70,9 @@ export default function EditPost({
         newErrors[err.path[0] as keyof ErrorsType] = err.message
       })
       setErrors(newErrors)
+      return
     } else {
       setErrors({})
-
       try {
         setIsSubmitting(true)
         await updatePostById(id, { title, description, imageLink })
@@ -180,7 +182,7 @@ export default function EditPost({
 
             <button
               type="submit"
-              disabled={isSubmitting || Object.keys(errors).length > 0}
+              disabled={isSubmitting}
               className={`bg-yellow text-white px-4 py-2 rounded-lg mt-3 ${
                 isSubmitting ? 'opacity-50' : ''
               }`}
