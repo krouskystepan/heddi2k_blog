@@ -212,7 +212,9 @@ export default function Kraken() {
         }
       >
         <Image
-          src={'/kraken.png'}
+          src={
+            krakenData.status === 'very_angry' ? '/kraken.gif' : '/kraken.png'
+          }
           alt="kraken"
           width={682}
           height={366}

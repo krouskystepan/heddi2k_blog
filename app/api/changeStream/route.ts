@@ -1,5 +1,8 @@
 import { MongoClient } from 'mongodb'
 import { NextResponse } from 'next/server'
+
+export const maxDuration = 60
+
 export async function GET() {
   const client = new MongoClient(process.env.MONGO_URI as string)
   await client.connect()
