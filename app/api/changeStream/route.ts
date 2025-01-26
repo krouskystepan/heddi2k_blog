@@ -15,7 +15,7 @@ export async function GET() {
         controller.enqueue('Keeping connection alive...')
       }, 30000)
 
-      changeStream.on('change', (change) => {
+      changeStream.on('change', () => {
         controller.enqueue(`Document updated`)
       })
 
