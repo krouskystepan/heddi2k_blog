@@ -54,10 +54,11 @@ export async function getKrakenStatus() {
   try {
     await connectToDatabase()
 
-    const kraken = await Kraken.findOne()
+    let kraken = await Kraken.findOne()
 
     if (!kraken) {
-      throw new Error('Kraken not found!')
+      kraken = new Kraken({ status: 'fed', startTime: 0, timeline: [] })
+      await kraken.save()
     }
 
     if (kraken.status === 'fed' || kraken.startTime === 0) {
