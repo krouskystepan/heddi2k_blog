@@ -7,21 +7,21 @@ export async function GET() {
   const db = client.db(process.env.DB_NAME)
   const collection = db.collection('krakens')
 
-  const pipeline = [
-    { $match: { operationType: { $in: ['insert', 'update'] } } },
-  ]
-
-  const changeStream = collection.watch(pipeline)
+  const changeStream = collection.watch()
 
   const readableStreamDefaultWriter = new ReadableStream({
     start(controller) {
-      changeStream.on('change', () => {
-        controller.enqueue(`Document updated\n`)
+      const interval = setInterval(() => {
+        controller.enqueue('Keeping connection alive...')
+      }, 30000)
+
+      changeStream.on('change', (change) => {
+        controller.enqueue(`Document updated`)
       })
 
       changeStream.on('close', () => {
+        clearInterval(interval)
         controller.close()
-        client.close()
       })
     },
   })
