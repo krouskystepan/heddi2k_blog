@@ -204,7 +204,11 @@ export default function Kraken() {
           {krakenData.status === 'fed' && (
             <button
               onClick={handleStart}
-              className="bg-purple text-white px-6 py-2 rounded font-bold text-xl transition-all duration-300 hover:scale-105"
+              className={`bg-purple text-white px-6 py-2 rounded font-bold text-xl transition-all duration-300 ${
+                isSubmitting
+                  ? 'opacity-50 cursor-not-allowed'
+                  : 'hover:scale-105'
+              }`}
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Kraken se probouzí...' : 'Probudit Krakena'}
@@ -213,7 +217,11 @@ export default function Kraken() {
           {krakenData.status !== 'fed' && (
             <button
               onClick={handleFeed}
-              className="bg-blue text-white px-6 py-2 rounded font-bold text-xl transition-all duration-300 hover:scale-105"
+              className={`bg-blue text-white px-6 py-2 rounded font-bold text-xl transition-all duration-300 ${
+                isSubmitting
+                  ? 'opacity-50 cursor-not-allowed'
+                  : 'hover:scale-105'
+              }`}
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Mňam Mňam...' : 'Nakrmit Krakena'}
