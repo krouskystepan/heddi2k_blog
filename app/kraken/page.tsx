@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   krakenInitialState,
   krakenStateColors,
@@ -9,13 +9,14 @@ import {
   getCurrentPhase,
   getRemainingTime,
   formatTime,
+  krakenStateAudio,
 } from './utils'
 import {
   feedKraken,
   getKrakenStatus,
   startKraken,
 } from '@/actions/kraken.action'
-import { KrakenData } from './types'
+import { KrakenData, KrakenState } from './types'
 import { motion } from 'framer-motion'
 import { LoaderCircle } from 'lucide-react'
 import { useSession } from 'next-auth/react'
@@ -31,11 +32,13 @@ export default function Kraken() {
   const [krakenData, setKrakenData] = useState<KrakenData>(krakenInitialState)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [isWindowClicked, setIsWindowClicked] = useState(false)
+  const previousStatus = useRef<KrakenState['status'] | null>(null)
   const session = useSession()
 
-  const fetchData = async () => {
+  const fetchData = async (isInitialLoad = false) => {
     try {
-      setIsLoading(true)
+      if (isInitialLoad) setIsLoading(true)
       const kraken = await getKrakenStatus()
 
       if (LOGGING) console.log('Kraken Data:', kraken)
@@ -46,19 +49,23 @@ export default function Kraken() {
         timeline: kraken.timeline,
         startTime: kraken.startTime,
       })
-      setIsLoading(false)
+      if (isInitialLoad) setIsLoading(false)
     } catch (error) {
       console.error('Error fetching Kraken data:', error)
+      if (isInitialLoad) setIsLoading(false)
     }
   }
 
   useEffect(() => {
-    fetchData()
+    fetchData(true)
   }, [])
 
   // Refetch data every 5 minutes (300,000ms)
   useEffect(() => {
-    const interval = setInterval(fetchData, 300000)
+    const interval = setInterval(() => {
+      fetchData()
+      if (LOGGING) console.log('Refetching Kraken Data...')
+    }, 300000)
 
     return () => clearInterval(interval)
   }, [])
@@ -78,6 +85,24 @@ export default function Kraken() {
       return () => clearInterval(interval)
     }
   }, [krakenData])
+
+  useEffect(() => {
+    if (krakenData.status !== previousStatus.current && isWindowClicked) {
+      if (LOGGING) console.log('Playing audio for:', krakenData.status)
+
+      const status = krakenData.status as keyof typeof krakenStateAudio
+
+      if (!krakenStateAudio[status]) return
+
+      const audio = new Audio(krakenStateAudio[status].source)
+      audio.volume = krakenStateAudio[status].volume
+
+      audio.play()
+
+      previousStatus.current = krakenData.status
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [krakenData.status])
 
   const handleStart = async () => {
     try {
@@ -131,13 +156,34 @@ export default function Kraken() {
     )
   }
 
+  if (!isWindowClicked) {
+    return (
+      <div className="bg-purple h-dvh flex items-center justify-center flex-col gap-4 text-center max-w-3xl mx-auto">
+        <p className="font-eater tracking-widest font-bold text-xl sm:text-3xl md:text-5xl text-yellow !leading-snug">
+          Jsi si jistý, že chceš vstoupit do těchto neprobádaných vod?
+        </p>
+        <button
+          onClick={() => setIsWindowClicked(true)}
+          className="bg-emerald-500 px-4 py-2 rounded-lg text-lg transition-all duration-200 hover:scale-105"
+        >
+          PUST MĚ TAM ZMRDE
+        </button>
+        <button className="bg-rose-500 px-4 py-2 rounded-lg text-lg transition-all duration-200 hover:scale-105">
+          <Link href={'/'} className="text-gray-200">
+            JSEM PUSSY JDU PRYC
+          </Link>
+        </button>
+      </div>
+    )
+  }
+
   return (
     <motion.div
       className="relative min-h-dvh py-6 flex flex-col items-center justify-center cursor-kraken"
       animate={{ backgroundColor: krakenStateColors[krakenData.status] }}
       transition={{ duration: 0.5, ease: 'easeInOut' }}
     >
-      <div className="py-2 px-4 absolute left-1/2 top-0 -translate-x-1/2">
+      <div className="py-2 px-4 absolute left-1/2 top-0 -translate-x-1/2 text-center">
         <Link
           href="/"
           className="text-white font-eater tracking-widest underline text-xl md:text-3xl"

@@ -24,9 +24,9 @@ export async function startKraken(
     const kraken = await Kraken.findOne()
 
     if (!kraken) {
-      await Kraken.create({ status: 'full', startTime, timeline })
+      await Kraken.create({ startTime, timeline })
     } else {
-      await Kraken.updateOne({ status: 'full', startTime, timeline })
+      await Kraken.updateOne({ startTime, timeline })
     }
   } catch (error) {
     console.log(error)
@@ -35,6 +35,11 @@ export async function startKraken(
 
 export async function feedKraken() {
   try {
+    const session = await getServerSession()
+    if (!session) {
+      throw new Error('Not logged in!')
+    }
+
     await connectToDatabase()
 
     const kraken = await Kraken.findOne()
@@ -43,7 +48,7 @@ export async function feedKraken() {
       throw new Error('Kraken not found!')
     }
 
-    await Kraken.updateOne({ status: 'fed', startTime: 0, timeline: [] })
+    await Kraken.updateOne({ startTime: 0, timeline: [] })
   } catch (error) {
     console.error('Error feeding Kraken:', error)
     throw error
@@ -57,11 +62,11 @@ export async function getKrakenStatus() {
     let kraken = await Kraken.findOne()
 
     if (!kraken) {
-      kraken = new Kraken({ status: 'fed', startTime: 0, timeline: [] })
+      kraken = new Kraken({ startTime: 0, timeline: [] })
       await kraken.save()
     }
 
-    if (kraken.status === 'fed' || kraken.startTime === 0) {
+    if (kraken.startTime === 0) {
       return {
         currentPhase: 'fed',
         remainingTime: 0,

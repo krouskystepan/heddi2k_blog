@@ -6,14 +6,6 @@ interface DocumentTimeline {
 }
 
 export interface IKraken extends Document {
-  status:
-    | 'fed'
-    | 'full'
-    | 'starting_to_get_hungry'
-    | 'hungry'
-    | 'very_hungry'
-    | 'angry'
-    | 'very_angry'
   startTime: number
   timeline: DocumentTimeline[]
 }
@@ -30,20 +22,6 @@ const TimelineSchema = new Schema<DocumentTimeline>({
 })
 
 const KrakenSchema = new Schema<IKraken>({
-  status: {
-    type: String,
-    required: true,
-    enum: [
-      'fed',
-      'full',
-      'starting_to_get_hungry',
-      'hungry',
-      'very_hungry',
-      'angry',
-      'very_angry',
-    ],
-    default: 'fed',
-  },
   startTime: {
     type: Number,
     required: true,

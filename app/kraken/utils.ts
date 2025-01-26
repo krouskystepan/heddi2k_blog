@@ -4,8 +4,6 @@ export const LOGGING = false
 /*
   Jak to používat:
   Normálně jen PROBUĎ KRAKENA, ne? Mhmmmm xdddd....
-
-  TODO: FIX mobile on side page 
 */
 const HOUR = 60 * 60
 export const MIN_KRAKEN_TIME = HOUR * 3
@@ -35,6 +33,32 @@ export const krakenStateColors: Record<KrakenState['status'], string> = {
   very_hungry: '#FF7518', // Red
   angry: '#A70F2B', // Dark Red
   very_angry: '#7B0816', // Intense Dark Red
+}
+
+export const krakenStateAudio: Record<
+  Exclude<KrakenState['status'], 'fed' | 'full'>,
+  { source: string; volume: number }
+> = {
+  starting_to_get_hungry: {
+    source: '/sounds/starting_to_get_hungry.mp3',
+    volume: 0.15,
+  },
+  hungry: {
+    source: '/sounds/hungry.mp3',
+    volume: 0.3,
+  },
+  very_hungry: {
+    source: '/sounds/very_hungry.mp3',
+    volume: 0.5,
+  },
+  angry: {
+    source: '/sounds/angry.mp3',
+    volume: 0.75,
+  },
+  very_angry: {
+    source: '/sounds/very_angry.mp3',
+    volume: 1,
+  },
 }
 
 export const generateTimeline = (): {
