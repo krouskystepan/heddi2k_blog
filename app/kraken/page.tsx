@@ -29,6 +29,7 @@ import Link from 'next/link'
 
 export default function Kraken() {
   const [krakenData, setKrakenData] = useState<KrakenData>(krakenInitialState)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const session = useSession()
 
@@ -80,30 +81,43 @@ export default function Kraken() {
 
   const handleStart = async () => {
     try {
-      if (krakenData.status === 'fed') {
-        const timeline = generateTimeline()
-        console.log('Generated Timeline:', timeline)
+      if (krakenData.status !== 'fed') return
 
-        const startTime = Date.now()
+      setIsSubmitting(true)
+      const timeline = generateTimeline()
 
-        await startKraken(timeline, startTime)
+      if (LOGGING) console.log('Generated Timeline:', timeline)
 
-        setKrakenData({
-          status: timeline[0].status,
-          remainingTime: timeline[0].time,
-          timeline,
-          startTime: startTime,
-        })
-      }
+      const startTime = Date.now()
+
+      await startKraken(timeline, startTime)
+
+      setKrakenData({
+        status: timeline[0].status,
+        remainingTime: timeline[0].time,
+        timeline,
+        startTime: startTime,
+      })
+      setIsSubmitting(false)
     } catch (error) {
       console.error('Error starting the Kraken:', error)
     }
   }
 
   const handleFeed = async () => {
-    if (LOGGING) console.log('You fed the Kraken!')
-    await feedKraken()
-    setKrakenData(krakenInitialState)
+    try {
+      if (krakenData.status === 'fed') return
+
+      setIsSubmitting(true)
+      if (LOGGING) console.log('You fed the Kraken!')
+
+      await feedKraken()
+
+      setKrakenData(krakenInitialState)
+      setIsSubmitting(false)
+    } catch (error) {
+      console.error('Error feeding the Kraken:', error)
+    }
   }
 
   if (isLoading) {
@@ -191,16 +205,18 @@ export default function Kraken() {
             <button
               onClick={handleStart}
               className="bg-purple text-white px-6 py-2 rounded font-bold text-xl transition-all duration-300 hover:scale-105"
+              disabled={isSubmitting}
             >
-              Probudit Krakena
+              {isSubmitting ? 'Kraken se probouzí...' : 'Probudit Krakena'}
             </button>
           )}
           {krakenData.status !== 'fed' && (
             <button
               onClick={handleFeed}
               className="bg-blue text-white px-6 py-2 rounded font-bold text-xl transition-all duration-300 hover:scale-105"
+              disabled={isSubmitting}
             >
-              Nakrmit Krakena
+              {isSubmitting ? 'Mňam Mňam...' : 'Nakrmit Krakena'}
             </button>
           )}
         </>
