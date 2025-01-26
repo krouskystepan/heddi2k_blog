@@ -7,20 +7,21 @@ export async function GET() {
   const db = client.db(process.env.DB_NAME)
   const collection = db.collection('krakens')
 
-  // Create a change stream to listen for MongoDB changes
-  const changeStream = collection.watch()
+  const pipeline = [
+    { $match: { operationType: { $in: ['insert', 'update'] } } },
+  ]
 
-  // Set up the SSE response
+  const changeStream = collection.watch(pipeline)
+
   const readableStreamDefaultWriter = new ReadableStream({
     start(controller) {
-      changeStream.on('change', (change) => {
-        // Push each MongoDB change as an SSE message
-        controller.enqueue(`data: ${JSON.stringify(change)}\n\n`)
+      changeStream.on('change', () => {
+        controller.enqueue(`Document updated\n`)
       })
 
-      // Handle stream closure
       changeStream.on('close', () => {
         controller.close()
+        client.close()
       })
     },
   })
