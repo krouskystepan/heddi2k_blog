@@ -1,13 +1,13 @@
 import { KrakenState, KrakenData } from './types'
 
-export const LOGGING = true
+export const LOGGING = false
 /*
   Jak to používat:
   Normálně jen PROBUĎ KRAKENA, ne? Mhmmmm xdddd....
 */
-// const HOUR = 60 * 60
-export const MIN_KRAKEN_TIME = 60
-export const MAX_KRAKEN_TIME = 60 * 3
+const HOUR = 60 * 60
+export const MIN_KRAKEN_TIME = HOUR * 3
+export const MAX_KRAKEN_TIME = HOUR * 6
 
 export const krakenStates: KrakenState['status'][] = [
   'full',
