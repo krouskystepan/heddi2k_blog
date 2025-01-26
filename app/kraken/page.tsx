@@ -60,14 +60,16 @@ export default function Kraken() {
     fetchData(true)
   }, [])
 
-  // Refetch data every 5 minutes (300,000ms)
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetchData()
-      if (LOGGING) console.log('Refetching Kraken Data...')
-    }, 300000)
+    const eventSource = new EventSource('/api/changeStream')
 
-    return () => clearInterval(interval)
+    eventSource.onmessage = () => {
+      fetchData()
+    }
+
+    return () => {
+      eventSource.close()
+    }
   }, [])
 
   useEffect(() => {
