@@ -3,7 +3,7 @@ import { KrakenState } from './types'
 import { krakenDescriptionAnimationMap } from './animation'
 
 export const getKrakenJSX = (status: KrakenState['status']) => {
-  const commonStyle = 'text-xl md:text-3xl font-bold'
+  const commonStyle = 'text-xl md:text-3xl font-bold text-center'
 
   switch (status) {
     case 'fed':
@@ -34,11 +34,12 @@ export const getKrakenJSX = (status: KrakenState['status']) => {
     case 'hungry':
       return (
         <motion.p
-          className={`${commonStyle} text-orange-500`}
+          className={`${commonStyle} text-black`}
           animate={krakenDescriptionAnimationMap[status]}
           transition={{ duration: 1.2, repeat: Infinity, repeatType: 'mirror' }}
         >
-          Kraken je hladový.{' '}
+          Kraken je hladový.
+          <br />
           <span className="text-rose-700">Měl bys ho nakrmit!</span>
         </motion.p>
       )
@@ -46,11 +47,12 @@ export const getKrakenJSX = (status: KrakenState['status']) => {
     case 'very_hungry':
       return (
         <motion.p
-          className={`${commonStyle} text-red-500`}
+          className={`${commonStyle} text-black`}
           animate={krakenDescriptionAnimationMap[status]}
           transition={{ duration: 1, repeat: Infinity, repeatType: 'mirror' }}
         >
-          Kraken je velmi hladový.{' '}
+          Kraken je velmi hladový.
+          <br />
           <span className="text-rose-800">Nakrm ho HNED!</span>
         </motion.p>
       )
@@ -58,11 +60,12 @@ export const getKrakenJSX = (status: KrakenState['status']) => {
     case 'angry':
       return (
         <motion.p
-          className={`${commonStyle} text-red-700`}
+          className={`${commonStyle} text-black`}
           animate={krakenDescriptionAnimationMap[status]}
           transition={{ duration: 0.8, repeat: Infinity, repeatType: 'mirror' }}
         >
-          Kraken je naštvaný.{' '}
+          Kraken je naštvaný.
+          <br />
           <span className="text-amber-400">NAKRM HO IHNED!</span>
         </motion.p>
       )
@@ -70,12 +73,13 @@ export const getKrakenJSX = (status: KrakenState['status']) => {
     case 'very_angry':
       return (
         <motion.div
-          className="text-xl font-extrabold text-rose-800 bg-black p-4 border-4 border-rose-700 rounded-md"
+          className="text-xl font-extrabold text-rose-800 bg-black p-4 border-4 border-rose-700 rounded-md text-center"
           animate={krakenDescriptionAnimationMap[status]}
           transition={{ duration: 0.8, repeat: Infinity, repeatType: 'mirror' }}
         >
-          KRAKEN ŠÍLÍ.{' '}
-          <span className="text-yellow-500">
+          KRAKEN ŠÍLÍ.
+          <br />
+          <span className="text-amber-300">
             NAKRM HO IHNED NEBO BUDE POZDĚ!
           </span>
         </motion.div>

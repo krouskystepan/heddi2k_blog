@@ -39,9 +39,11 @@ export const krakenImageStageAnimationMap = {
   },
   angry: {
     rotate: [0, 10, -8, 12, -11],
+    scale: [1, 1.1, 1],
   },
   very_angry: {
     rotate: [0, 12, -10, 14, -13],
+    scale: [1, 1.3, 1],
   },
 }
 export const krakenDescriptionAnimationMap = {

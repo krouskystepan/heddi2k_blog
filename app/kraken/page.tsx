@@ -117,7 +117,7 @@ export default function Kraken() {
 
   return (
     <motion.div
-      className="relative h-screen flex flex-col items-center justify-center cursor-kraken"
+      className="relative h-dvh flex flex-col items-center justify-center cursor-kraken"
       animate={{ backgroundColor: krakenStateColors[krakenData.status] }}
       transition={{ duration: 0.5, ease: 'easeInOut' }}
     >

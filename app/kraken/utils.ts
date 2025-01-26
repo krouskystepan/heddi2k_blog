@@ -2,9 +2,9 @@ import { KrakenState, KrakenData } from './types'
 
 export const LOGGING = true
 
-// const HOUR = 60 * 60
-export const MIN_KRAKEN_TIME = 20
-export const MAX_KRAKEN_TIME = 60
+const HOUR = 60 * 60
+export const MIN_KRAKEN_TIME = HOUR * 2
+export const MAX_KRAKEN_TIME = HOUR * 5
 
 export const krakenStates: KrakenState['status'][] = [
   'full',
