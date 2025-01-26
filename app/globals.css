@@ -15,7 +15,7 @@
 body {
   cursor: url('/cursor.png') 32 32, auto;
   background-color: var(--blue);
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .cursor-kraken {

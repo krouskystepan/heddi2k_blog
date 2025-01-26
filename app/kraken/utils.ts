@@ -1,7 +1,16 @@
 import { KrakenState, KrakenData } from './types'
 
 export const LOGGING = false
+/*
+  Jakej čas tam chceš? Teď je tam random rozmezí mezi 3-6h (první fáze - poslední fáze). Měl jsem tam 2-5, ale to mi přišlo moc krátký, kdyby ti padly ty 2, tak abys to tam zase neházel moc často. Kdyžtak to pak můžeme poupravit ten čas, protože teď to nedokážu vůbec odhadnout. 
 
+  Chceš vidět ty jednotlivý "fáze" a nebo to chceš mít jako překvapení v průběhu?
+
+  Jenom se možná bojím, že když tam naleze více lidí, tak aby to nepadlo ta free databáze, jakože aby to nepřetížili, ale uvivíme... Jen aby jsi s tím počítal, že se to může stát.. xdd
+
+  Jak to používat:
+  Normálně jen PROBUĎ KRAKENA, ne? Mhmmmm xdddd....
+*/
 const HOUR = 60 * 60
 export const MIN_KRAKEN_TIME = HOUR * 3
 export const MAX_KRAKEN_TIME = HOUR * 6

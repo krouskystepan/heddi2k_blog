@@ -107,7 +107,7 @@ export default function Kraken() {
 
   if (isLoading) {
     return (
-      <div className="bg-purple h-screen flex items-center justify-center flex-col gap-5">
+      <div className="bg-purple h-dvh flex items-center justify-center flex-col gap-5">
         <LoaderCircle size={64} className="text-yellow animate-spin" />
         <p className="font-eater tracking-widest font-bold text-4xl md:text-5xl text-yellow">
           Načítám
