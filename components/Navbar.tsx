@@ -17,14 +17,14 @@ export default async function Navbar() {
           </Link>
         </section>
       )}
-      {/* <section className="bg-blue w-full py-1 -rotate-1">
+      <section className="bg-blue w-full py-1 -rotate-1">
         <Link
           href={'/kraken'}
           className="text-2xl md:text-5xl text-pink-500 font-creepster underline tracking-widest"
         >
           KRAKEN
         </Link>
-      </section> */}
+      </section>
       <section className="space-y-3">
         <h1 className="font-bold">
           <span className="font-eater text-5xl text-yellow">Barbieho </span>

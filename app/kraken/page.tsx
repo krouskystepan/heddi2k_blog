@@ -25,6 +25,7 @@ import {
   krakenImageStageAnimationMap,
 } from './animation'
 import { getKrakenJSX } from './krakenStateJSX'
+import Link from 'next/link'
 
 export default function Kraken() {
   const [krakenData, setKrakenData] = useState<KrakenData>(krakenInitialState)
@@ -118,10 +119,18 @@ export default function Kraken() {
 
   return (
     <motion.div
-      className="relative h-dvh flex flex-col items-center justify-center cursor-kraken"
+      className="relative min-h-dvh py-6 flex flex-col items-center justify-center cursor-kraken"
       animate={{ backgroundColor: krakenStateColors[krakenData.status] }}
       transition={{ duration: 0.5, ease: 'easeInOut' }}
     >
+      <div className="py-2 px-4 absolute left-1/2 top-0 -translate-x-1/2">
+        <Link
+          href="/"
+          className="text-white font-eater tracking-widest underline text-xl md:text-3xl"
+        >
+          Moje myšlenky
+        </Link>
+      </div>
       <motion.section
         animate={
           krakenData.status === 'fed'
@@ -169,7 +178,9 @@ export default function Kraken() {
         Kraken
       </motion.h1>
 
-      <section className="p-4">{getKrakenJSX(krakenData.status)}</section>
+      <section className="px-4 py-2 sm:py-3 lg:py-4">
+        {getKrakenJSX(krakenData.status)}
+      </section>
 
       {/* 
           Only show buttons if user is logged in 
