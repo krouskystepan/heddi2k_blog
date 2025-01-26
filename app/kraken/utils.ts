@@ -1,10 +1,10 @@
 import { KrakenState, KrakenData } from './types'
 
-export const LOGGING = true
+export const LOGGING = false
 
 const HOUR = 60 * 60
-export const MIN_KRAKEN_TIME = HOUR * 2
-export const MAX_KRAKEN_TIME = HOUR * 5
+export const MIN_KRAKEN_TIME = HOUR * 3
+export const MAX_KRAKEN_TIME = HOUR * 6
 
 export const krakenStates: KrakenState['status'][] = [
   'full',
@@ -122,4 +122,17 @@ export const getRemainingTime = (krakenData: KrakenData) => {
     accumulatedTime += phase.time
   }
   return 0
+}
+
+export function formatTime(seconds: number): string {
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  const remainingSeconds = seconds % 60
+  const parts = []
+
+  if (hours > 0) parts.push(`${hours}h`)
+  if (minutes > 0) parts.push(`${minutes}m`)
+  if (remainingSeconds > 0) parts.push(`${remainingSeconds}s`)
+
+  return parts.join(' ')
 }

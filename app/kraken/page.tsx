@@ -8,6 +8,7 @@ import {
   LOGGING,
   getCurrentPhase,
   getRemainingTime,
+  formatTime,
 } from './utils'
 import {
   feedKraken,
@@ -201,7 +202,10 @@ export default function Kraken() {
         <section className="absolute top-0 right-0 bg-black/50 px-4 py-3">
           <div className="text-xl font-medium text-white">
             <p>Current Phase: {krakenData.status}</p>
-            <p>Remaining Time: {krakenData.remainingTime} seconds</p>
+            <p>
+              Remaining Time: {formatTime(krakenData.remainingTime)} (
+              {krakenData.remainingTime} seconds)
+            </p>
           </div>
           {krakenData.timeline && krakenData.timeline.length > 0 && (
             <div className="text-white mb-4">
@@ -209,10 +213,26 @@ export default function Kraken() {
               <ul>
                 {krakenData.timeline.map((phase, index) => (
                   <li key={index} className="my-2">
-                    <strong>{phase.status}</strong> — {phase.time} seconds
+                    <strong>{phase.status}</strong> — {formatTime(phase.time)} (
+                    {phase.time} seconds)
                   </li>
                 ))}
               </ul>
+              <p className="text-lg font-semibold">
+                Total Time:{' '}
+                {formatTime(
+                  krakenData.timeline.reduce(
+                    (total, phase) => total + phase.time,
+                    0
+                  )
+                )}{' '}
+                (
+                {krakenData.timeline.reduce(
+                  (total, phase) => total + phase.time,
+                  0
+                )}{' '}
+                seconds)
+              </p>
             </div>
           )}
         </section>
