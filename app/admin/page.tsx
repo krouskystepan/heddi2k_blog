@@ -17,6 +17,8 @@ export default function AdminPage() {
   const session = useSession()
   const router = useRouter()
 
+  console.log('Session:', session)
+
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [imageLink, setImageLink] = useState('')

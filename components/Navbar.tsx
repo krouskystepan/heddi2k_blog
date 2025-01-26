@@ -1,17 +1,30 @@
+import { getServerSession } from 'next-auth'
 import Link from 'next/link'
 import React from 'react'
 
-export default function Navbar() {
+export default async function Navbar() {
+  const session = await getServerSession()
+
   return (
     <nav className="text-center space-y-3 pb-4 bg-purple">
-      <section className="bg-blue w-full py-1">
+      {session?.user?.name && (
+        <section className="bg-blue w-full py-1">
+          <Link
+            href={'/admin'}
+            className="text-xl text-yellow font-eater underline"
+          >
+            ADMIN PANEL PIČO
+          </Link>
+        </section>
+      )}
+      {/* <section className="bg-blue w-full py-1 -rotate-1">
         <Link
-          href={'/admin'}
-          className="text-xl text-yellow font-eater underline"
+          href={'/kraken'}
+          className="text-2xl md:text-5xl text-pink-500 font-creepster underline tracking-widest"
         >
-          ADMIN PANEL PIČO
+          KRAKEN
         </Link>
-      </section>
+      </section> */}
       <section className="space-y-3">
         <h1 className="font-bold">
           <span className="font-eater text-5xl text-yellow">Barbieho </span>

@@ -18,6 +18,10 @@ body {
   min-height: 100vh;
 }
 
+.cursor-kraken {
+  cursor: url('/cursor-kraken.png') 32 32, auto;
+}
+
 .font-glory {
   font-family: var(--font-give-you-glory);
 }
