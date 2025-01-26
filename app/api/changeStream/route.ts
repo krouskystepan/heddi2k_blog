@@ -9,24 +9,71 @@ export async function GET() {
 
   const changeStream = collection.watch()
 
-  const readableStreamDefaultWriter = new ReadableStream({
+  let controllerClosed = false
+
+  const readableStream = new ReadableStream({
     start(controller) {
       const interval = setInterval(() => {
-        controller.enqueue('Keeping connection alive...')
+        if (controllerClosed) return
+        try {
+          controller.enqueue('Keeping connection alive...')
+        } catch (err) {
+          console.error('Error enqueuing keep-alive message:', err)
+        }
       }, 30000)
 
       changeStream.on('change', () => {
-        controller.enqueue(`Document updated`)
+        if (controllerClosed) return
+        try {
+          controller.enqueue('Document updated')
+        } catch (err) {
+          console.error('Error enqueuing change event:', err)
+        }
       })
 
       changeStream.on('close', () => {
-        clearInterval(interval)
-        controller.close()
+        cleanup(interval, controller, 'close')
       })
+
+      changeStream.on('error', (error) => {
+        console.error('ChangeStream error:', error)
+        cleanup(interval, controller, 'error')
+      })
+    },
+    cancel() {
+      changeStream.close()
+      if (!controllerClosed) {
+        cleanup(null, null, 'cancel')
+      }
     },
   })
 
-  return new NextResponse(readableStreamDefaultWriter, {
+  function cleanup(
+    interval: NodeJS.Timeout | null,
+    controller: ReadableStreamDefaultController | null,
+    eventType: string
+  ) {
+    if (controllerClosed) return
+    controllerClosed = true
+
+    if (interval) clearInterval(interval)
+
+    if (controller) {
+      try {
+        if (eventType === 'error') {
+          controller.error(new Error('Stream error occurred'))
+        } else {
+          if (!controllerClosed) {
+            controller.close()
+          }
+        }
+      } catch (err) {
+        console.error(`Error closing controller during ${eventType}:`, err)
+      }
+    }
+  }
+
+  return new NextResponse(readableStream, {
     headers: {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
