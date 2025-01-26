@@ -64,6 +64,7 @@ export default function Kraken() {
     const eventSource = new EventSource('/api/changeStream')
 
     eventSource.onmessage = () => {
+      console.log('eventSource', eventSource)
       fetchData()
     }
 
