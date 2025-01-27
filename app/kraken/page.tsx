@@ -73,6 +73,16 @@ export default function Kraken() {
     }
   }, [])
 
+  // Refetch data every 5 minutes (300,000ms)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchData()
+      if (LOGGING) console.log('Refetching Kraken Data...')
+    }, 300_000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   useEffect(() => {
     if (krakenData.status === 'very_angry') return
 
