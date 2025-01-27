@@ -172,18 +172,19 @@ export default function Kraken() {
   if (!isWindowClicked) {
     return (
       <div className="bg-purple h-dvh flex items-center justify-center flex-col gap-4 text-center max-w-3xl mx-auto">
-        <p className="font-eater tracking-widest font-bold text-xl sm:text-3xl md:text-5xl text-yellow !leading-snug">
+        <p className="font-eater tracking-widest font-bold text-xl sm:text-3xl md:text-5xl text-yellow !leading-snug rotate-3 skew-x-12 skew-y-3 bg-blue p-4 rounded-sm">
           Jsi si jistý, že chceš vstoupit do těchto neprobádaných vod?
         </p>
+
         <button
           onClick={() => setIsWindowClicked(true)}
-          className="bg-emerald-500 px-4 py-2 rounded-lg text-lg transition-all duration-200 hover:scale-105"
+          className="bg-emerald-700 text-white px-4 py-2 rounded-lg text-lg skew-x-12 skew-y-6 -rotate-6 transition-all duration-200 hover:scale-105 hover:rotate-0"
         >
           PUST MĚ TAM ZMRDE
         </button>
-        <button className="bg-rose-500 px-4 py-2 rounded-lg text-lg transition-all duration-200 hover:scale-105">
-          <Link href={'/'} className="text-gray-200">
-            JSEM PUSSY JDU PRYC
+        <button className="bg-rose-700 px-4 py-2 rounded-lg text-lg -skew-x-12 -skew-y-9 rotate-6 transition-all duration-200 hover:scale-105 hover:rotate-12">
+          <Link href={'/'} className="text-white">
+            JDU DO PRDELE SRAČKO
           </Link>
         </button>
       </div>
