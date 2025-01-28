@@ -9,7 +9,7 @@ Růžová: Akce uživatele
 */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const hasPermsForLogs = (session: any) => {
-  return session.data?.user?.name === 'admin'
+  return session.data?.user?.name === 'Admin'
 }
 
 // 5 Phases of Kraken (plus fed and very_angry = no time)
