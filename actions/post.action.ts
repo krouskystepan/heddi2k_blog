@@ -13,8 +13,6 @@ import {
 } from 'firebase/firestore'
 import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
-import { connectToDatabase } from '@/lib/db'
-import Post from '@/database/post.model'
 import { db } from '@/lib/firebase'
 import { TPost } from '@/types'
 
@@ -128,30 +126,5 @@ export const getPosts = async (): Promise<TPost[] | undefined> => {
     })
   } catch (error) {
     console.error('Error getting posts:', error)
-  }
-}
-
-export const transferDataToFirebase = async () => {
-  try {
-    await connectToDatabase()
-
-    // Get all posts from MongoDB
-    const mongoPosts = await Post.find()
-
-    for (const mongoPost of mongoPosts) {
-      const postRef = doc(db, 'posts', mongoPost._id.toString())
-      await setDoc(postRef, {
-        title: mongoPost.title,
-        description: mongoPost.description,
-        imageLink: mongoPost.imageLink ?? '',
-        createdAt: mongoPost.createdAt.toISOString(),
-        updatedAt: mongoPost.updatedAt?.toISOString(),
-      })
-      console.log(`Post '${mongoPost.title}' transferred to Firebase`)
-    }
-
-    console.log('Data transfer to Firebase completed.')
-  } catch (error) {
-    console.error('Error transferring data to Firebase:', error)
   }
 }
