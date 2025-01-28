@@ -73,7 +73,9 @@ export default function Kraken() {
         if (docSnapshot.exists()) {
           const data = docSnapshot.data()
 
-          console.log('Document data:', data)
+          if (LOGGING)
+            console.log('%cSnapchot Kraken Data:', 'color: #0BDA51;', data)
+
           setKrakenData({
             remainingTime: getRemainingTime(data.startTime, data.timeline),
             status: getCurrentPhase(data.startTime, data.timeline).status,
