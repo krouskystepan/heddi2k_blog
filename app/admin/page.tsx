@@ -77,7 +77,7 @@ export default function AdminPage() {
       </div>
       <section className="bg-purple min-h-screen flex justify-center items-center">
         <div className="text-center">
-          {session.data?.user?.name === 'Admin' && (
+          {session.data?.user?.name === 'admin' && (
             <h1 className="texy-yellow text-6xl">BUH</h1>
           )}
           <h2 className="text-yellow font-mynerve text-5xl max-h-fit">

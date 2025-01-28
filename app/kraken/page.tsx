@@ -5,7 +5,7 @@ import {
   krakenInitialState,
   krakenStateColors,
   generateTimeline,
-  LOGGING,
+  hasPermsForLogs,
   getCurrentPhase,
   getRemainingTime,
   formatTime,
@@ -44,7 +44,7 @@ export default function Kraken() {
       if (isInitialLoad) setIsLoading(true)
       const kraken = await getKrakenStatus()
 
-      if (LOGGING)
+      if (hasPermsForLogs(session))
         console.log('%cFetching Kraken Data:', 'color: #0BDA51;', kraken)
 
       setKrakenData({
@@ -62,6 +62,7 @@ export default function Kraken() {
 
   useEffect(() => {
     fetchData(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -73,7 +74,7 @@ export default function Kraken() {
         if (docSnapshot.exists()) {
           const data = docSnapshot.data()
 
-          if (LOGGING)
+          if (hasPermsForLogs(session))
             console.log('%cSnapchot Kraken Data:', 'color: #0BDA51;', data)
 
           setKrakenData({
@@ -93,7 +94,7 @@ export default function Kraken() {
 
     // Cleanup the listener when the component unmounts
     return () => unsubscribe()
-  }, [])
+  }, [session])
 
   useEffect(() => {
     if (krakenData.status === 'very_angry') return
@@ -117,7 +118,7 @@ export default function Kraken() {
 
   useEffect(() => {
     if (krakenData.status !== previousStatus.current && isWindowClicked) {
-      if (LOGGING)
+      if (hasPermsForLogs(session))
         console.log(
           '%cPlaying audio for:',
           'color: #FFC000;',
@@ -145,7 +146,7 @@ export default function Kraken() {
       setIsSubmitting(true)
       const timeline = generateTimeline()
 
-      if (LOGGING) {
+      if (hasPermsForLogs(session)) {
         console.log(
           '%cGenerated Timeline:',
           'color: #0096FF;',
@@ -160,7 +161,8 @@ export default function Kraken() {
       const startTime = Date.now()
 
       await startKraken(timeline, startTime)
-      if (LOGGING) console.log('%cYou woke up the kraken!', 'color: #FF69B4;')
+      if (hasPermsForLogs(session))
+        console.log('%cYou woke up the kraken!', 'color: #FF69B4;')
 
       setKrakenData({
         status: timeline[0].status,
@@ -179,7 +181,8 @@ export default function Kraken() {
       if (krakenData.status === 'fed') return
 
       setIsSubmitting(true)
-      if (LOGGING) console.log('%cYou fed the Kraken!', 'color: #FF69B4;')
+      if (hasPermsForLogs(session))
+        console.log('%cYou fed the Kraken!', 'color: #FF69B4;')
 
       await feedKraken()
 
@@ -327,7 +330,7 @@ export default function Kraken() {
       {/* 
           Logging only for development purposes (utils.ts)
       */}
-      {LOGGING && (
+      {hasPermsForLogs(session) && (
         <section className="absolute top-0 right-0 bg-black/50 px-4 py-3">
           <div className="text-xl font-medium text-white">
             <p>Current Phase: {krakenData.status}</p>

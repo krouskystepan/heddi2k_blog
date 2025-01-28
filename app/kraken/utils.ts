@@ -7,7 +7,10 @@ Oranžová: Play audio
 Modrá: Generovaní dat
 Růžová: Akce uživatele
 */
-export const LOGGING = false
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const hasPermsForLogs = (session: any) => {
+  return session.data?.user?.name
+}
 
 // 5 Phases of Kraken (plus fed and very_angry = no time)
 const MINUTE = 60
