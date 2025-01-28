@@ -23,11 +23,11 @@ export async function startKraken(
 
     const kraken = await Kraken.findOne()
 
-    if (!kraken) {
-      await Kraken.create({ startTime, timeline })
-    } else {
-      await Kraken.updateOne({ startTime, timeline })
-    }
+    if (!kraken) throw new Error('Kraken not found!')
+
+    if (kraken.startTime !== 0) throw new Error('Kraken already started!')
+
+    await Kraken.updateOne({ startTime, timeline })
   } catch (error) {
     console.log(error)
   }
@@ -44,9 +44,9 @@ export async function feedKraken() {
 
     const kraken = await Kraken.findOne()
 
-    if (!kraken) {
-      throw new Error('Kraken not found!')
-    }
+    if (!kraken) throw new Error('Kraken not found!')
+
+    if (kraken.startTime === 0) throw new Error('Kraken not started!')
 
     await Kraken.updateOne({ startTime: 0, timeline: [] })
   } catch (error) {
