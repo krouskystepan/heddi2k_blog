@@ -1,9 +1,22 @@
 'use server'
 
-import Post, { IPost } from '@/database/post.model'
-import { connectToDatabase } from '@/lib/db'
+import {
+  collection,
+  doc,
+  setDoc,
+  deleteDoc,
+  getDoc,
+  getDocs,
+  updateDoc,
+  query,
+  orderBy,
+} from 'firebase/firestore'
 import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
+import { connectToDatabase } from '@/lib/db'
+import Post from '@/database/post.model'
+import { db } from '@/lib/firebase'
+import { TPost } from '@/types'
 
 export const createPost = async ({
   title,
@@ -20,9 +33,13 @@ export const createPost = async ({
       throw new Error('Not logged in')
     }
 
-    await connectToDatabase()
-
-    await Post.create({ title, description, imageLink })
+    const postRef = doc(collection(db, 'posts'))
+    await setDoc(postRef, {
+      title,
+      description,
+      imageLink,
+      createdAt: new Date().toISOString(),
+    })
     console.log(`Post '${title}' created`)
 
     revalidatePath('/')
@@ -38,9 +55,8 @@ export const deletePost = async (id: string) => {
       throw new Error('Not logged in')
     }
 
-    await connectToDatabase()
-
-    await Post.findByIdAndDelete(id)
+    const postRef = doc(db, 'posts', id)
+    await deleteDoc(postRef)
     console.log(`Post '${id}' deleted`)
 
     revalidatePath('/')
@@ -49,29 +65,22 @@ export const deletePost = async (id: string) => {
   }
 }
 
-export const getPostById = async (id: string) => {
+export const getPostById = async (id: string): Promise<TPost | undefined> => {
   try {
     const session = await getServerSession()
     if (!session?.user?.name) {
       throw new Error('Not logged in')
     }
 
-    await connectToDatabase()
+    const postRef = doc(db, 'posts', id)
+    const postSnap = await getDoc(postRef)
 
-    const post = await Post.findById(id).lean<IPost>()
-
-    if (!post) {
+    if (!postSnap.exists()) {
       throw new Error('Post not found')
     }
 
-    const serializedPost = {
-      ...post,
-      _id: (post._id as unknown as string).toString(),
-      createdAt: post.createdAt.toISOString(),
-      updatedAt: post.updatedAt.toISOString(),
-    }
-
-    return serializedPost
+    const post = postSnap.data() as TPost
+    return { ...post, id: postSnap.id }
   } catch (error) {
     console.error('Error getting post:', error)
   }
@@ -87,9 +96,8 @@ export const updatePostById = async (
       throw new Error('Not logged in')
     }
 
-    await connectToDatabase()
-
-    await Post.findByIdAndUpdate(id, data)
+    const postRef = doc(db, 'posts', id)
+    await updateDoc(postRef, { ...data, updatedAt: new Date().toISOString() })
     console.log(`Post '${id}' updated`)
 
     revalidatePath('/')
@@ -99,13 +107,51 @@ export const updatePostById = async (
 }
 
 // No perms
-export const getPosts = async () => {
+export const getPosts = async (): Promise<TPost[] | undefined> => {
+  try {
+    const postsQuery = query(
+      collection(db, 'posts'),
+      orderBy('createdAt', 'desc')
+    )
+    const postsSnap = await getDocs(postsQuery)
+
+    return postsSnap.docs.map((doc) => {
+      const data = doc.data()
+      return {
+        id: doc.id,
+        title: data.title,
+        description: data.description,
+        imageLink: data.imageLink,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+      } as TPost
+    })
+  } catch (error) {
+    console.error('Error getting posts:', error)
+  }
+}
+
+export const transferDataToFirebase = async () => {
   try {
     await connectToDatabase()
 
-    const posts = await Post.find().sort({ createdAt: -1 })
-    return posts
+    // Get all posts from MongoDB
+    const mongoPosts = await Post.find()
+
+    for (const mongoPost of mongoPosts) {
+      const postRef = doc(db, 'posts', mongoPost._id.toString())
+      await setDoc(postRef, {
+        title: mongoPost.title,
+        description: mongoPost.description,
+        imageLink: mongoPost.imageLink,
+        createdAt: mongoPost.createdAt.toISOString(),
+        updatedAt: mongoPost.updatedAt?.toISOString(),
+      })
+      console.log(`Post '${mongoPost.title}' transferred to Firebase`)
+    }
+
+    console.log('Data transfer to Firebase completed.')
   } catch (error) {
-    console.error('Error getting posts:', error)
+    console.error('Error transferring data to Firebase:', error)
   }
 }

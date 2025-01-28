@@ -1,10 +1,11 @@
 'use server'
 
 import { KrakenState } from '@/app/kraken/types'
-import { krakenStates } from '@/app/kraken/utils'
-import Kraken from '@/database/kraken.model'
-import { connectToDatabase } from '@/lib/db'
+import { KRAKEN_DOC_ID, krakenStates } from '@/app/kraken/utils'
 import { getServerSession } from 'next-auth'
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
+import { TKraken } from '@/types'
 
 export async function startKraken(
   timeline: {
@@ -19,17 +20,24 @@ export async function startKraken(
       throw new Error('Not logged in!')
     }
 
-    await connectToDatabase()
+    const krakenRef = doc(db, 'kraken', KRAKEN_DOC_ID)
+    const krakenSnap = await getDoc(krakenRef)
 
-    const kraken = await Kraken.findOne()
+    if (!krakenSnap.exists()) {
+      throw new Error('Kraken not found!')
+    }
 
-    if (!kraken) throw new Error('Kraken not found!')
+    const kraken = krakenSnap.data()
 
-    if (kraken.startTime !== 0) throw new Error('Kraken already started!')
+    if (kraken.startTime !== 0) {
+      console.error('Kraken already started!')
+      return
+    }
 
-    await Kraken.updateOne({ startTime, timeline })
+    await updateDoc(krakenRef, { startTime, timeline })
   } catch (error) {
-    console.log(error)
+    console.error('Error starting Kraken:', error)
+    throw error
   }
 }
 
@@ -40,30 +48,41 @@ export async function feedKraken() {
       throw new Error('Not logged in!')
     }
 
-    await connectToDatabase()
+    const krakenRef = doc(db, 'kraken', KRAKEN_DOC_ID)
+    const krakenSnap = await getDoc(krakenRef)
 
-    const kraken = await Kraken.findOne()
+    if (!krakenSnap.exists()) {
+      throw new Error('Kraken not found!')
+    }
 
-    if (!kraken) throw new Error('Kraken not found!')
+    const kraken = krakenSnap.data()
 
-    if (kraken.startTime === 0) throw new Error('Kraken not started!')
+    if (kraken.startTime === 0) {
+      console.error('Kraken already fed!')
+      return
+    }
 
-    await Kraken.updateOne({ startTime: 0, timeline: [] })
+    await updateDoc(krakenRef, { startTime: 0, timeline: [] })
   } catch (error) {
     console.error('Error feeding Kraken:', error)
     throw error
   }
 }
 
-export async function getKrakenStatus() {
+export async function getKrakenStatus(): Promise<TKraken> {
   try {
-    await connectToDatabase()
+    const krakenRef = doc(db, 'kraken', KRAKEN_DOC_ID)
+    let krakenSnap = await getDoc(krakenRef)
 
-    let kraken = await Kraken.findOne()
+    if (!krakenSnap.exists()) {
+      const defaultKraken = { startTime: 0, timeline: [] }
+      await setDoc(krakenRef, defaultKraken)
+      krakenSnap = await getDoc(krakenRef)
+    }
 
+    const kraken = krakenSnap.data()
     if (!kraken) {
-      kraken = new Kraken({ startTime: 0, timeline: [] })
-      await kraken.save()
+      throw new Error('Unexpected error: Kraken data is undefined')
     }
 
     if (kraken.startTime === 0) {

@@ -10,6 +10,7 @@ import {
   getRemainingTime,
   formatTime,
   krakenStateAudio,
+  KRAKEN_DOC_ID,
 } from './utils'
 import {
   feedKraken,
@@ -27,6 +28,8 @@ import {
 } from './animation'
 import { getKrakenJSX } from './krakenStateJSX'
 import Link from 'next/link'
+import { db } from '@/lib/firebase'
+import { doc, onSnapshot } from 'firebase/firestore'
 
 export default function Kraken() {
   const [krakenData, setKrakenData] = useState<KrakenData>(krakenInitialState)
@@ -61,55 +64,33 @@ export default function Kraken() {
     fetchData(true)
   }, [])
 
-  // Refetch data every 5 minutes (300,000ms)
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetchData()
-      if (LOGGING)
-        console.log('%cRefetching Kraken Data (5min):', 'color: #0BDA51;')
-    }, 300_000)
+    const docRef = doc(db, 'kraken', KRAKEN_DOC_ID)
 
-    return () => clearInterval(interval)
-  }, [])
+    const unsubscribe = onSnapshot(
+      docRef,
+      (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data()
 
-  useEffect(() => {
-    const es = new EventSource('/api/krakenEvent')
+          console.log('Document data:', data)
+          setKrakenData({
+            remainingTime: getRemainingTime(data.startTime, data.timeline),
+            status: getCurrentPhase(data.startTime, data.timeline).status,
+            timeline: data.timeline,
+            startTime: data.startTime,
+          })
+        } else {
+          console.log('Document not found or deleted!')
+        }
+      },
+      (error) => {
+        console.error('Error receiving snapshot:', error)
+      }
+    )
 
-    es.onopen = () => {
-      if (LOGGING)
-        console.log('%cListening for kraken events', 'color: #0BDA51;')
-    }
-
-    es.onerror = (error) => {
-      if (LOGGING) console.log('EventSource Error:', error)
-    }
-
-    es.onmessage = (event) => {
-      const {
-        updateDescription: { updatedFields },
-      } = JSON.parse(event.data)
-
-      if (LOGGING)
-        console.log(
-          '%cReceived Kraken Event:',
-          'color: #0BDA51;',
-          updatedFields
-        )
-
-      if (updatedFields.startTime === 0)
-        return setKrakenData(krakenInitialState)
-
-      setKrakenData({
-        status: getCurrentPhase(updatedFields).status,
-        remainingTime: 0,
-        timeline: updatedFields.timeline,
-        startTime: updatedFields.startTime,
-      })
-    }
-
-    return () => {
-      es.close()
-    }
+    // Cleanup the listener when the component unmounts
+    return () => unsubscribe()
   }, [])
 
   useEffect(() => {
@@ -119,8 +100,12 @@ export default function Kraken() {
       const interval = setInterval(() => {
         setKrakenData((prevValues) => ({
           ...prevValues,
-          remainingTime: getRemainingTime(krakenData),
-          status: getCurrentPhase(krakenData).status,
+          remainingTime: getRemainingTime(
+            krakenData.startTime,
+            krakenData.timeline
+          ),
+          status: getCurrentPhase(krakenData.startTime, krakenData.timeline)
+            .status,
         }))
       }, 1000)
 

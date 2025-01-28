@@ -12,6 +12,8 @@
     "@types/bcrypt": "^5.0.2",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+    "firebase": "^11.2.0",
+    "firebase-admin": "^13.0.2",
     "framer-motion": "^11.18.1",
     "lucide-react": "^0.473.0",
     "mongodb": "^6.12.0",
