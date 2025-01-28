@@ -2,7 +2,7 @@ import Kraken from '@/database/kraken.model'
 import { MongoClient } from 'mongodb'
 import { NextResponse } from 'next/server'
 
-export const maxDuration = 30
+export const maxDuration = 60
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
