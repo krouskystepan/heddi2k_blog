@@ -143,7 +143,7 @@ export const transferDataToFirebase = async () => {
       await setDoc(postRef, {
         title: mongoPost.title,
         description: mongoPost.description,
-        imageLink: mongoPost.imageLink,
+        imageLink: mongoPost.imageLink ?? '',
         createdAt: mongoPost.createdAt.toISOString(),
         updatedAt: mongoPost.updatedAt?.toISOString(),
       })

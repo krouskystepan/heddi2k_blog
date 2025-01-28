@@ -6,8 +6,8 @@ import { transferDataToFirebase } from '@/actions/post.action'
 export default function DevTools() {
   return (
     <>
-      {/* <CreateAdmin /> */}
-      {/* <TransferData /> */}
+      <CreateAdmin />
+      <TransferData />
     </>
   )
 }
@@ -17,8 +17,8 @@ function CreateAdmin() {
     <button
       onClick={() =>
         createAdmin({
-          username: 'Barbie',
-          password: '0123456789Barbie9876543210',
+          username: '',
+          password: '',
         })
       }
     >
