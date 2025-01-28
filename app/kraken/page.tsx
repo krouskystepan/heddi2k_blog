@@ -61,6 +61,17 @@ export default function Kraken() {
     fetchData(true)
   }, [])
 
+  // Refetch data every 5 minutes (300,000ms)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchData()
+      if (LOGGING)
+        console.log('%cRefetching Kraken Data (5min):', 'color: #0BDA51;')
+    }, 300_000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   useEffect(() => {
     const es = new EventSource('/api/krakenEvent')
 
@@ -69,7 +80,9 @@ export default function Kraken() {
         console.log('%cListening for kraken events', 'color: #0BDA51;')
     }
 
-    es.onerror = (error) => console.log('EventSource Error:', error)
+    es.onerror = (error) => {
+      if (LOGGING) console.log('EventSource Error:', error)
+    }
 
     es.onmessage = (event) => {
       const {

@@ -2,7 +2,7 @@ import Kraken from '@/database/kraken.model'
 import { MongoClient } from 'mongodb'
 import { NextResponse } from 'next/server'
 
-export const maxDuration = 30
+export const maxDuration = 60
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
@@ -46,8 +46,9 @@ export async function GET() {
   return new NextResponse(readableStream, {
     headers: {
       'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
+      'Cache-Control': 'no-cache, no-transform',
       Connection: 'keep-alive',
+      'Access-Control-Allow-Origin': '*',
     },
   })
 }
