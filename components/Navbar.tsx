@@ -21,7 +21,7 @@ export default async function Navbar() {
         <div className="bg-blue w-full py-1 -rotate-1">
           <Link
             href={'/kraken'}
-            className="text-2xl md:text-5xl text-pink-500 font-creepster underline tracking-widest"
+            className="text-4xl md:text-5xl text-pink-500 font-creepster underline tracking-widest"
           >
             KRAKEN
           </Link>

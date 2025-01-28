@@ -1,13 +1,18 @@
 import { KrakenState, KrakenData } from './types'
 
-export const LOGGING = false
 /*
-  Jak to používat:
-  Normálně jen PROBUĎ KRAKENA, ne? Mhmmmm xdddd....
+LOGGING cheatsheet:
+Zelená: Fetch data
+Oranžová: Play audio
+Modrá: Generovaní dat
+Růžová: Akce uživatele
 */
-const HOUR = 60 * 60
-export const MIN_KRAKEN_TIME = HOUR * 3
-export const MAX_KRAKEN_TIME = HOUR * 6
+export const LOGGING = false
+
+// 5 Phases of Kraken (plus fed and very_angry = no time)
+const MINUTE = 60
+const MIN_KRAKEN_PHASE_TIME = MINUTE * 10
+const MAX_KRAKEN_PHASE_TIME = MINUTE * 105
 
 export const krakenStates: KrakenState['status'][] = [
   'full',
@@ -65,30 +70,15 @@ export const generateTimeline = (): {
   status: KrakenState['status']
   time: number
 }[] => {
-  const totalStates = krakenStates.length
-  const randomTime =
-    Math.floor(Math.random() * (MAX_KRAKEN_TIME - MIN_KRAKEN_TIME + 1)) +
-    MIN_KRAKEN_TIME
+  const getRandomTime = () =>
+    Math.floor(
+      Math.random() * (MAX_KRAKEN_PHASE_TIME - MIN_KRAKEN_PHASE_TIME + 1)
+    ) + MIN_KRAKEN_PHASE_TIME
 
-  let remainingTime = randomTime
-  const timeline: { status: KrakenState['status']; time: number }[] = []
-
-  for (let i = 0; i < totalStates - 1; i++) {
-    const status = krakenStates[i]
-
-    const maxRandom = Math.min(
-      remainingTime - (totalStates - 2 - i),
-      remainingTime / 2
-    )
-    const time = Math.floor(Math.random() * maxRandom) + 1
-
-    timeline.push({ status, time })
-    remainingTime -= time
-  }
-
-  timeline.push({ status: 'very_angry', time: 0 })
-
-  return timeline
+  return krakenStates.map((state) => ({
+    status: state,
+    time: state === 'very_angry' ? 0 : getRandomTime(),
+  }))
 }
 
 const getElapsedTime = (krakenData: KrakenData) => {

@@ -41,7 +41,8 @@ export default function Kraken() {
       if (isInitialLoad) setIsLoading(true)
       const kraken = await getKrakenStatus()
 
-      if (LOGGING) console.log('Kraken Data:', kraken)
+      if (LOGGING)
+        console.log('%cFetching Kraken Data:', 'color: #0BDA51;', kraken)
 
       setKrakenData({
         status: kraken.currentPhase,
@@ -61,26 +62,41 @@ export default function Kraken() {
   }, [])
 
   useEffect(() => {
-    const eventSource = new EventSource('/api/changeStream')
+    const es = new EventSource('/api/krakenEvent')
 
-    eventSource.onmessage = () => {
-      console.log('eventSource', eventSource)
-      fetchData()
+    es.onopen = () => {
+      if (LOGGING)
+        console.log('%cListening for kraken events', 'color: #0BDA51;')
+    }
+
+    es.onerror = (error) => console.log('EventSource Error:', error)
+
+    es.onmessage = (event) => {
+      const {
+        updateDescription: { updatedFields },
+      } = JSON.parse(event.data)
+
+      if (LOGGING)
+        console.log(
+          '%cReceived Kraken Event:',
+          'color: #0BDA51;',
+          updatedFields
+        )
+
+      if (updatedFields.startTime === 0)
+        return setKrakenData(krakenInitialState)
+
+      setKrakenData({
+        status: getCurrentPhase(updatedFields).status,
+        remainingTime: 0,
+        timeline: updatedFields.timeline,
+        startTime: updatedFields.startTime,
+      })
     }
 
     return () => {
-      eventSource.close()
+      es.close()
     }
-  }, [])
-
-  // Refetch data every 5 minutes (300,000ms)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchData()
-      if (LOGGING) console.log('Refetching Kraken Data...')
-    }, 300_000)
-
-    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
@@ -101,7 +117,12 @@ export default function Kraken() {
 
   useEffect(() => {
     if (krakenData.status !== previousStatus.current && isWindowClicked) {
-      if (LOGGING) console.log('Playing audio for:', krakenData.status)
+      if (LOGGING)
+        console.log(
+          '%cPlaying audio for:',
+          'color: #FFC000;',
+          krakenData.status
+        )
 
       const status = krakenData.status as keyof typeof krakenStateAudio
 
@@ -124,11 +145,22 @@ export default function Kraken() {
       setIsSubmitting(true)
       const timeline = generateTimeline()
 
-      if (LOGGING) console.log('Generated Timeline:', timeline)
+      if (LOGGING) {
+        console.log(
+          '%cGenerated Timeline:',
+          'color: #0096FF;',
+          timeline.map((t) => ({
+            status: t.status,
+            formattedTime: formatTime(t.time),
+            timeInSeconds: t.time,
+          }))
+        )
+      }
 
       const startTime = Date.now()
 
       await startKraken(timeline, startTime)
+      if (LOGGING) console.log('%cYou woke up the kraken!', 'color: #FF69B4;')
 
       setKrakenData({
         status: timeline[0].status,
@@ -147,7 +179,7 @@ export default function Kraken() {
       if (krakenData.status === 'fed') return
 
       setIsSubmitting(true)
-      if (LOGGING) console.log('You fed the Kraken!')
+      if (LOGGING) console.log('%cYou fed the Kraken!', 'color: #FF69B4;')
 
       await feedKraken()
 
@@ -178,11 +210,11 @@ export default function Kraken() {
 
         <button
           onClick={() => setIsWindowClicked(true)}
-          className="bg-emerald-700 text-white px-4 py-2 rounded-lg text-lg skew-x-12 skew-y-6 -rotate-6 transition-all duration-200 hover:scale-105 hover:rotate-0"
+          className="bg-emerald-700 text-white px-4 py-2 rounded-lg text-lg md:text-2xl skew-x-12 skew-y-6 -rotate-6 transition-all duration-200 hover:scale-105 hover:rotate-0"
         >
           PUST MĚ TAM ZMRDE
         </button>
-        <button className="bg-rose-700 px-4 py-2 rounded-lg text-lg -skew-x-12 -skew-y-9 rotate-6 transition-all duration-200 hover:scale-105 hover:rotate-12">
+        <button className="bg-rose-700 px-4 py-2 rounded-lg text-lg md:text-2xl -skew-x-12 -skew-y-9 rotate-6 transition-all duration-200 hover:scale-105 hover:rotate-12">
           <Link href={'/'} className="text-white">
             JDU DO PRDELE SRAČKO
           </Link>

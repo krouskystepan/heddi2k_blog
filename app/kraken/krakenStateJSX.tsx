@@ -86,6 +86,8 @@ export const getKrakenJSX = (status: KrakenState['status']) => {
       )
 
     default:
-      return <p className="text-gray-500">Stav Krakena není známý.</p>
+      return (
+        <p className={`${commonStyle} text-white`}>Stav Krakena není známý.</p>
+      )
   }
 }
