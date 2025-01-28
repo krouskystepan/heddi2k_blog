@@ -57,8 +57,6 @@ export default function EditPost({
     fetchPost()
   }, [id, router])
 
-  console.log(errors)
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 

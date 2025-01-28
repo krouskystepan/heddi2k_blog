@@ -1,21 +1,24 @@
 'use server'
 
-import Admin from '@/database/admin.model'
-import { connectToDatabase } from '@/lib/db'
-import { revalidatePath } from 'next/cache'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { getServerSession } from 'next-auth'
 import bcrypt from 'bcrypt'
+import { revalidatePath } from 'next/cache'
+import { db } from '@/lib/firebase'
 
 export async function getAdmin({ username }: { username: string }) {
   try {
-    await connectToDatabase()
+    const adminRef = doc(db, 'admins', username)
+    const adminSnap = await getDoc(adminRef)
 
-    const admin = await Admin.findOne({ username })
-
-    revalidatePath('/')
-    return admin
+    if (adminSnap.exists()) {
+      revalidatePath('/')
+      return adminSnap.data()
+    } else {
+      throw new Error('Admin not found')
+    }
   } catch (error) {
-    console.error(error)
+    console.error('Error fetching admin:', error)
   }
 }
 
@@ -32,16 +35,16 @@ export async function createAdmin({
       throw new Error('Not logged in')
     }
 
-    await connectToDatabase()
+    const adminRef = doc(db, 'admins', username)
+    const adminSnap = await getDoc(adminRef)
 
-    const existingAdmin = await Admin.findOne({ username })
-    if (existingAdmin) {
+    if (adminSnap.exists()) {
       throw new Error('Username already exists')
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    await Admin.create({ username, password: hashedPassword })
+    await setDoc(adminRef, { username, password: hashedPassword })
     console.log(`Admin ${username} created`)
 
     revalidatePath('/')

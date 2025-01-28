@@ -1,4 +1,4 @@
-import { KrakenState, KrakenData } from './types'
+import { KrakenState, KrakenData, KrakenPhase } from './types'
 
 /*
 LOGGING cheatsheet:
@@ -7,12 +7,15 @@ Oranžová: Play audio
 Modrá: Generovaní dat
 Růžová: Akce uživatele
 */
-export const LOGGING = false
+export const LOGGING = true
 
 // 5 Phases of Kraken (plus fed and very_angry = no time)
 const MINUTE = 60
 const MIN_KRAKEN_PHASE_TIME = MINUTE * 10
 const MAX_KRAKEN_PHASE_TIME = MINUTE * 105
+
+// Do not change this value
+export const KRAKEN_DOC_ID = 'kraken'
 
 export const krakenStates: KrakenState['status'][] = [
   'full',
@@ -81,21 +84,22 @@ export const generateTimeline = (): {
   }))
 }
 
-const getElapsedTime = (krakenData: KrakenData) => {
-  if (!krakenData.startTime) return 0
+const getElapsedTime = (startTime: number) => {
+  if (!startTime) return 0
   const currentTimestamp = Date.now()
-  return Math.floor((currentTimestamp - krakenData.startTime) / 1000)
+  return Math.floor((currentTimestamp - startTime) / 1000)
 }
 
 export const getCurrentPhase = (
-  krakenData: KrakenData
+  startTime: number,
+  timeline: KrakenPhase[]
 ): {
   status: KrakenState['status']
   time: number
 } => {
-  const elapsedSinceStart = getElapsedTime(krakenData)
+  const elapsedSinceStart = getElapsedTime(startTime)
 
-  if (!krakenData.timeline || krakenData.timeline.length === 0) {
+  if (!timeline || timeline.length === 0) {
     return {
       status: 'fed',
       time: 0,
@@ -104,7 +108,7 @@ export const getCurrentPhase = (
 
   let accumulatedTime = 0
 
-  for (const phase of krakenData.timeline) {
+  for (const phase of timeline) {
     if (
       elapsedSinceStart >= accumulatedTime &&
       elapsedSinceStart < accumulatedTime + phase.time
@@ -127,11 +131,14 @@ export const getCurrentPhase = (
   }
 }
 
-export const getRemainingTime = (krakenData: KrakenData) => {
+export const getRemainingTime = (
+  startTime: number,
+  timeline: KrakenPhase[]
+) => {
   let accumulatedTime = 0
-  const elapsedSinceStart = getElapsedTime(krakenData)
+  const elapsedSinceStart = getElapsedTime(startTime)
 
-  for (const phase of krakenData.timeline) {
+  for (const phase of timeline) {
     if (
       elapsedSinceStart >= accumulatedTime &&
       elapsedSinceStart < accumulatedTime + phase.time

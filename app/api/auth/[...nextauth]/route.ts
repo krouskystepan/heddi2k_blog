@@ -25,7 +25,7 @@ const options = {
 
         if (!isPasswordValid) return null
 
-        return { id: admin.id.toString(), name: admin.username }
+        return { id: admin.id, name: admin.username }
       },
     }),
   ],
