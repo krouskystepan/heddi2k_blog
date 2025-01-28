@@ -7,7 +7,7 @@ Oranžová: Play audio
 Modrá: Generovaní dat
 Růžová: Akce uživatele
 */
-export const LOGGING = false
+export const LOGGING = true
 
 // 5 Phases of Kraken (plus fed and very_angry = no time)
 const MINUTE = 60
