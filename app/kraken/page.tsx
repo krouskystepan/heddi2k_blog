@@ -29,14 +29,14 @@ import { getKrakenJSX } from './krakenStateJSX'
 import Link from 'next/link'
 import { db } from '@/lib/firebase'
 import { doc, onSnapshot } from 'firebase/firestore'
-import { TKraken, TKrakenState } from '@/types'
+import { TKraken } from '@/types'
 
 export default function Kraken() {
   const [krakenData, setKrakenData] = useState<TKraken>(krakenInitialState)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isWindowClicked, setIsWindowClicked] = useState(false)
-  const previousStatus = useRef<TKrakenState['status'] | null>(null)
+  const previousStatus = useRef<TKraken['status'] | null>(null)
   const session = useSession()
 
   const fetchData = async (isInitialLoad = false) => {

@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
 import { krakenDescriptionAnimationMap } from './animation'
-import { TKrakenState } from '@/types'
+import { TKraken } from '@/types'
 
-export const getKrakenJSX = (status: TKrakenState['status']) => {
+export const getKrakenJSX = (status: TKraken['status']) => {
   const commonStyle = 'text-xl md:text-3xl font-bold text-center'
 
   switch (status) {

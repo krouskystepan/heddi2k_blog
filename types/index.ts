@@ -12,27 +12,22 @@ export type TPost = {
   updatedAt: Date
 }
 
-export type TKrakenState = {
-  status:
-    | 'fed'
-    | 'full'
-    | 'starting_to_get_hungry'
-    | 'hungry'
-    | 'very_hungry'
-    | 'angry'
-    | 'very_angry'
-  remainingTime: number
-  timeline: { status: TKrakenState['status']; time: number }[]
-  startTime: number
-}
+type TStatus =
+  | 'fed'
+  | 'full'
+  | 'starting_to_get_hungry'
+  | 'hungry'
+  | 'very_hungry'
+  | 'angry'
+  | 'very_angry'
 
 export type TKrakenPhase = {
-  status: string
+  status: TStatus
   time: number
 }
 
 export type TKraken = {
-  status: TKrakenState['status']
+  status: TStatus
   startTime: number
   timeline: TKrakenPhase[]
   remainingTime: number

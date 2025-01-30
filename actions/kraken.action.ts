@@ -4,11 +4,11 @@ import { KRAKEN_DOC_ID, krakenStates } from '@/app/kraken/utils'
 import { getServerSession } from 'next-auth'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
-import { TKraken, TKrakenState } from '@/types'
+import { TKraken } from '@/types'
 
 export async function startKraken(
   timeline: {
-    status: TKrakenState['status']
+    status: TKraken['status']
     time: number
   }[],
   startTime: number
@@ -94,10 +94,8 @@ export async function getKrakenStatus(): Promise<TKraken> {
     }
 
     const timeline = [...kraken.timeline].sort(
-      (
-        a: { status: TKrakenState['status'] },
-        b: { status: TKrakenState['status'] }
-      ) => krakenStates.indexOf(a.status) - krakenStates.indexOf(b.status)
+      (a: { status: TKraken['status'] }, b: { status: TKraken['status'] }) =>
+        krakenStates.indexOf(a.status) - krakenStates.indexOf(b.status)
     )
 
     const currentTime = Date.now()

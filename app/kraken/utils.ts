@@ -6,7 +6,7 @@ Modrá: Generovaní dat
 Růžová: Akce uživatele
 */
 
-import { TKrakenState, TKraken, TKrakenPhase } from '@/types'
+import { TKraken, TKrakenPhase } from '@/types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const hasPermsForLogs = (session: any) => {
@@ -21,7 +21,7 @@ const MAX_KRAKEN_PHASE_TIME = MINUTE * 105
 // Do not change this value
 export const KRAKEN_DOC_ID = 'kraken'
 
-export const krakenStates: TKrakenState['status'][] = [
+export const krakenStates: TKraken['status'][] = [
   'full',
   'starting_to_get_hungry',
   'hungry',
@@ -37,7 +37,7 @@ export const krakenInitialState: TKraken = {
   startTime: 0,
 }
 
-export const krakenStateColors: Record<TKrakenState['status'], string> = {
+export const krakenStateColors: Record<TKraken['status'], string> = {
   fed: '#009E60', // Green
   full: '#50C878', // Light Green
   starting_to_get_hungry: '#FDDA0D', // Yellow
@@ -48,7 +48,7 @@ export const krakenStateColors: Record<TKrakenState['status'], string> = {
 }
 
 export const krakenStateAudio: Record<
-  Exclude<TKrakenState['status'], 'fed' | 'full'>,
+  Exclude<TKraken['status'], 'fed' | 'full'>,
   { source: string; volume: number }
 > = {
   starting_to_get_hungry: {
@@ -74,7 +74,7 @@ export const krakenStateAudio: Record<
 }
 
 export const generateTimeline = (): {
-  status: TKrakenState['status']
+  status: TKraken['status']
   time: number
 }[] => {
   const getRandomTime = () =>
@@ -98,7 +98,7 @@ export const getCurrentPhase = (
   startTime: number,
   timeline: TKrakenPhase[]
 ): {
-  status: TKrakenState['status']
+  status: TKraken['status']
   time: number
 } => {
   const elapsedSinceStart = getElapsedTime(startTime)
@@ -118,7 +118,7 @@ export const getCurrentPhase = (
       elapsedSinceStart < accumulatedTime + phase.time
     ) {
       return {
-        status: phase.status as TKrakenState['status'],
+        status: phase.status as TKraken['status'],
         time: phase.time,
       }
     }
