@@ -12,13 +12,8 @@ import {
   krakenStateAudio,
   KRAKEN_DOC_ID,
 } from './utils'
-import {
-  feedKraken,
-  getKrakenStatus,
-  startKraken,
-} from '@/actions/kraken.action'
+import { feedKraken, startKraken } from '@/actions/kraken.action'
 import { motion } from 'framer-motion'
-import { LoaderCircle } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import {
@@ -34,36 +29,9 @@ import { TKraken } from '@/types'
 export default function Kraken() {
   const [krakenData, setKrakenData] = useState<TKraken>(krakenInitialState)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
   const [isWindowClicked, setIsWindowClicked] = useState(false)
   const previousStatus = useRef<TKraken['status'] | null>(null)
   const session = useSession()
-
-  const fetchData = async (isInitialLoad = false) => {
-    try {
-      if (isInitialLoad) setIsLoading(true)
-      const kraken = await getKrakenStatus()
-
-      if (hasPermsForLogs(session))
-        console.log('%cFetching Kraken Data:', 'color: #0BDA51;', kraken)
-
-      setKrakenData({
-        status: kraken.status,
-        remainingTime: kraken.remainingTime,
-        timeline: kraken.timeline,
-        startTime: kraken.startTime,
-      })
-      if (isInitialLoad) setIsLoading(false)
-    } catch (error) {
-      console.error('Error fetching Kraken data:', error)
-      if (isInitialLoad) setIsLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchData(true)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   useEffect(() => {
     const docRef = doc(db, 'kraken', KRAKEN_DOC_ID)
@@ -92,7 +60,6 @@ export default function Kraken() {
       }
     )
 
-    // Cleanup the listener when the component unmounts
     return () => unsubscribe()
   }, [session])
 
@@ -193,16 +160,16 @@ export default function Kraken() {
     }
   }
 
-  if (isLoading) {
-    return (
-      <div className="bg-purple h-dvh flex items-center justify-center flex-col gap-5">
-        <LoaderCircle size={64} className="text-yellow animate-spin" />
-        <p className="font-eater tracking-widest font-bold text-4xl md:text-5xl text-yellow">
-          Načítám
-        </p>
-      </div>
-    )
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="bg-purple h-dvh flex items-center justify-center flex-col gap-5">
+  //       <LoaderCircle size={64} className="text-yellow animate-spin" />
+  //       <p className="font-eater tracking-widest font-bold text-4xl md:text-5xl text-yellow">
+  //         Načítám
+  //       </p>
+  //     </div>
+  //   )
+  // }
 
   if (!isWindowClicked) {
     return (
