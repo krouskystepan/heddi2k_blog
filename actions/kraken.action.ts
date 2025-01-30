@@ -1,15 +1,14 @@
 'use server'
 
-import { KrakenState } from '@/app/kraken/types'
 import { KRAKEN_DOC_ID, krakenStates } from '@/app/kraken/utils'
 import { getServerSession } from 'next-auth'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
-import { TKraken } from '@/types'
+import { TKraken, TKrakenState } from '@/types'
 
 export async function startKraken(
   timeline: {
-    status: KrakenState['status']
+    status: TKrakenState['status']
     time: number
   }[],
   startTime: number
@@ -87,7 +86,7 @@ export async function getKrakenStatus(): Promise<TKraken> {
 
     if (kraken.startTime === 0) {
       return {
-        currentPhase: 'fed',
+        status: 'fed',
         remainingTime: 0,
         timeline: [],
         startTime: 0,
@@ -96,8 +95,8 @@ export async function getKrakenStatus(): Promise<TKraken> {
 
     const timeline = [...kraken.timeline].sort(
       (
-        a: { status: KrakenState['status'] },
-        b: { status: KrakenState['status'] }
+        a: { status: TKrakenState['status'] },
+        b: { status: TKrakenState['status'] }
       ) => krakenStates.indexOf(a.status) - krakenStates.indexOf(b.status)
     )
 
@@ -123,7 +122,7 @@ export async function getKrakenStatus(): Promise<TKraken> {
     }
 
     return {
-      currentPhase: currentPhase.status,
+      status: currentPhase.status,
       remainingTime: Math.floor(Math.max(0, remainingTime) / 1000),
       timeline: JSON.parse(JSON.stringify(timeline)),
       startTime: kraken.startTime,

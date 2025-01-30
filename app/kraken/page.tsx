@@ -17,7 +17,6 @@ import {
   getKrakenStatus,
   startKraken,
 } from '@/actions/kraken.action'
-import { KrakenData, KrakenState } from './types'
 import { motion } from 'framer-motion'
 import { LoaderCircle } from 'lucide-react'
 import { useSession } from 'next-auth/react'
@@ -30,13 +29,14 @@ import { getKrakenJSX } from './krakenStateJSX'
 import Link from 'next/link'
 import { db } from '@/lib/firebase'
 import { doc, onSnapshot } from 'firebase/firestore'
+import { TKraken, TKrakenState } from '@/types'
 
 export default function Kraken() {
-  const [krakenData, setKrakenData] = useState<KrakenData>(krakenInitialState)
+  const [krakenData, setKrakenData] = useState<TKraken>(krakenInitialState)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isWindowClicked, setIsWindowClicked] = useState(false)
-  const previousStatus = useRef<KrakenState['status'] | null>(null)
+  const previousStatus = useRef<TKrakenState['status'] | null>(null)
   const session = useSession()
 
   const fetchData = async (isInitialLoad = false) => {
@@ -48,7 +48,7 @@ export default function Kraken() {
         console.log('%cFetching Kraken Data:', 'color: #0BDA51;', kraken)
 
       setKrakenData({
-        status: kraken.currentPhase,
+        status: kraken.status,
         remainingTime: kraken.remainingTime,
         timeline: kraken.timeline,
         startTime: kraken.startTime,

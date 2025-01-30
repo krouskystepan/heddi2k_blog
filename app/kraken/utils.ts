@@ -1,5 +1,3 @@
-import { KrakenState, KrakenData, KrakenPhase } from './types'
-
 /*
 LOGGING cheatsheet:
 Zelená: Fetch data
@@ -7,6 +5,9 @@ Oranžová: Play audio
 Modrá: Generovaní dat
 Růžová: Akce uživatele
 */
+
+import { TKrakenState, TKraken, TKrakenPhase } from '@/types'
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const hasPermsForLogs = (session: any) => {
   return session.data?.user?.name === 'Admin'
@@ -20,7 +21,7 @@ const MAX_KRAKEN_PHASE_TIME = MINUTE * 105
 // Do not change this value
 export const KRAKEN_DOC_ID = 'kraken'
 
-export const krakenStates: KrakenState['status'][] = [
+export const krakenStates: TKrakenState['status'][] = [
   'full',
   'starting_to_get_hungry',
   'hungry',
@@ -29,14 +30,14 @@ export const krakenStates: KrakenState['status'][] = [
   'very_angry',
 ]
 
-export const krakenInitialState: KrakenData = {
+export const krakenInitialState: TKraken = {
   status: 'fed',
   remainingTime: 0,
   timeline: [],
   startTime: 0,
 }
 
-export const krakenStateColors: Record<KrakenState['status'], string> = {
+export const krakenStateColors: Record<TKrakenState['status'], string> = {
   fed: '#009E60', // Green
   full: '#50C878', // Light Green
   starting_to_get_hungry: '#FDDA0D', // Yellow
@@ -47,7 +48,7 @@ export const krakenStateColors: Record<KrakenState['status'], string> = {
 }
 
 export const krakenStateAudio: Record<
-  Exclude<KrakenState['status'], 'fed' | 'full'>,
+  Exclude<TKrakenState['status'], 'fed' | 'full'>,
   { source: string; volume: number }
 > = {
   starting_to_get_hungry: {
@@ -73,7 +74,7 @@ export const krakenStateAudio: Record<
 }
 
 export const generateTimeline = (): {
-  status: KrakenState['status']
+  status: TKrakenState['status']
   time: number
 }[] => {
   const getRandomTime = () =>
@@ -95,9 +96,9 @@ const getElapsedTime = (startTime: number) => {
 
 export const getCurrentPhase = (
   startTime: number,
-  timeline: KrakenPhase[]
+  timeline: TKrakenPhase[]
 ): {
-  status: KrakenState['status']
+  status: TKrakenState['status']
   time: number
 } => {
   const elapsedSinceStart = getElapsedTime(startTime)
@@ -117,7 +118,7 @@ export const getCurrentPhase = (
       elapsedSinceStart < accumulatedTime + phase.time
     ) {
       return {
-        status: phase.status as KrakenState['status'],
+        status: phase.status as TKrakenState['status'],
         time: phase.time,
       }
     }
@@ -136,7 +137,7 @@ export const getCurrentPhase = (
 
 export const getRemainingTime = (
   startTime: number,
-  timeline: KrakenPhase[]
+  timeline: TKrakenPhase[]
 ) => {
   let accumulatedTime = 0
   const elapsedSinceStart = getElapsedTime(startTime)
