@@ -85,16 +85,20 @@ export default function Kraken() {
 
   useEffect(() => {
     if (krakenData.status !== previousStatus.current && isWindowClicked) {
+      const status = krakenData.status as keyof typeof krakenStateAudio
+
+      if (!krakenStateAudio[status]) {
+        if (hasPermsForLogs(session))
+          console.log('%cNo audio for this status', 'color: #FFC000;')
+        return
+      }
+
       if (hasPermsForLogs(session))
         console.log(
           '%cPlaying audio for:',
           'color: #FFC000;',
           krakenData.status
         )
-
-      const status = krakenData.status as keyof typeof krakenStateAudio
-
-      if (!krakenStateAudio[status]) return
 
       const audio = new Audio(krakenStateAudio[status].source)
       audio.volume = krakenStateAudio[status].volume

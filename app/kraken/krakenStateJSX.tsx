@@ -8,9 +8,7 @@ export const getKrakenJSX = (status: TKraken['status']) => {
   switch (status) {
     case 'fed':
       return (
-        <p className={`${commonStyle} text-white`}>
-          Kraken je klidný a není hladový.
-        </p>
+        <p className={`${commonStyle} text-white`}>Kraken spí a nemá hlad.</p>
       )
 
     case 'full':

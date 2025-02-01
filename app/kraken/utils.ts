@@ -15,8 +15,8 @@ export const hasPermsForLogs = (session: any) => {
 
 // 5 Phases of Kraken (plus fed and very_angry = no time)
 const MINUTE = 60
-const MIN_KRAKEN_PHASE_TIME = MINUTE * 10
-const MAX_KRAKEN_PHASE_TIME = MINUTE * 105
+const MIN_KRAKEN_PHASE_TIME = MINUTE * 20
+const MAX_KRAKEN_PHASE_TIME = MINUTE * 90
 
 // Do not change this value
 export const KRAKEN_DOC_ID = 'kraken'
@@ -38,13 +38,13 @@ export const krakenInitialState: TKraken = {
 }
 
 export const krakenStateColors: Record<TKraken['status'], string> = {
-  fed: '#009E60', // Green
-  full: '#50C878', // Light Green
-  starting_to_get_hungry: '#FDDA0D', // Yellow
-  hungry: '#FEA813', // Orange
-  very_hungry: '#FF7518', // Red
-  angry: '#A70F2B', // Dark Red
-  very_angry: '#7B0816', // Intense Dark Red
+  fed: '#0047AB',
+  full: '#009E60',
+  starting_to_get_hungry: '#FDDA0D',
+  hungry: '#FEA813',
+  very_hungry: '#FF7518',
+  angry: '#A70F2B',
+  very_angry: '#880808',
 }
 
 export const krakenStateAudio: Record<
