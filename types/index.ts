@@ -29,6 +29,7 @@ export type TKrakenPhase = {
 export type TKraken = {
   status: TStatus
   startTime: number
-  timeline: TKrakenPhase[]
   remainingTime: number
+  lastFeed: number
+  timeline: TKrakenPhase[]
 }

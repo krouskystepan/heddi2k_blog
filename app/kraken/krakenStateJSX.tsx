@@ -2,13 +2,21 @@ import { motion } from 'framer-motion'
 import { krakenDescriptionAnimationMap } from './animation'
 import { TKraken } from '@/types'
 
-export const getKrakenJSX = (status: TKraken['status']) => {
+export const getKrakenJSX = (status: TKraken['status'], lastFeed: number) => {
   const commonStyle = 'text-xl md:text-3xl font-bold text-center'
+  // 20 mins
+  const timeWhenSleeping = 20 * 60 * 1000
+  const timeSinceFeed = Date.now() - lastFeed
+  const isSleeping = lastFeed > 0 && timeSinceFeed > timeWhenSleeping
 
   switch (status) {
     case 'fed':
       return (
-        <p className={`${commonStyle} text-white`}>Kraken spí a nemá hlad.</p>
+        <p className={`${commonStyle} text-white`}>
+          {isSleeping
+            ? 'Kraken spí a nemá hlad.'
+            : 'Kraken je nakrmený a chystá se jít spát.'}
+        </p>
       )
 
     case 'full':

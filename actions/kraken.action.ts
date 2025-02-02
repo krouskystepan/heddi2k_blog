@@ -33,7 +33,7 @@ export async function startKraken(
       return
     }
 
-    await updateDoc(krakenRef, { startTime, timeline })
+    await updateDoc(krakenRef, { startTime, timeline, lastFeed: 0 })
   } catch (error) {
     console.error('Error starting Kraken:', error)
     throw error
@@ -61,7 +61,11 @@ export async function feedKraken() {
       return
     }
 
-    await updateDoc(krakenRef, { startTime: 0, timeline: [] })
+    await updateDoc(krakenRef, {
+      startTime: 0,
+      timeline: [],
+      lastFeed: Date.now(),
+    })
   } catch (error) {
     console.error('Error feeding Kraken:', error)
     throw error
@@ -74,7 +78,7 @@ export async function getKrakenStatus(): Promise<TKraken> {
     let krakenSnap = await getDoc(krakenRef)
 
     if (!krakenSnap.exists()) {
-      const defaultKraken = { startTime: 0, timeline: [] }
+      const defaultKraken = { startTime: 0, timeline: [], lastFeed: 0 }
       await setDoc(krakenRef, defaultKraken)
       krakenSnap = await getDoc(krakenRef)
     }
@@ -88,8 +92,9 @@ export async function getKrakenStatus(): Promise<TKraken> {
       return {
         status: 'fed',
         remainingTime: 0,
-        timeline: [],
-        startTime: 0,
+        startTime: kraken.startTime,
+        lastFeed: kraken.lastFeed,
+        timeline: kraken.timeline,
       }
     }
 
@@ -122,8 +127,9 @@ export async function getKrakenStatus(): Promise<TKraken> {
     return {
       status: currentPhase.status,
       remainingTime: Math.floor(Math.max(0, remainingTime) / 1000),
-      timeline: JSON.parse(JSON.stringify(timeline)),
       startTime: kraken.startTime,
+      lastFeed: kraken.lastFeed,
+      timeline: JSON.parse(JSON.stringify(timeline)),
     }
   } catch (error) {
     console.error('Error fetching Kraken status:', error)

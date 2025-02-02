@@ -33,8 +33,9 @@ export const krakenStates: TKraken['status'][] = [
 export const krakenInitialState: TKraken = {
   status: 'fed',
   remainingTime: 0,
-  timeline: [],
   startTime: 0,
+  lastFeed: 0,
+  timeline: [],
 }
 
 export const krakenStateColors: Record<TKraken['status'], string> = {

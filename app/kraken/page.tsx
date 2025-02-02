@@ -25,10 +25,12 @@ import Link from 'next/link'
 import { db } from '@/lib/firebase'
 import { doc, onSnapshot } from 'firebase/firestore'
 import { TKraken } from '@/types'
+import { LoaderCircle } from 'lucide-react'
 
 export default function Kraken() {
   const [krakenData, setKrakenData] = useState<TKraken>(krakenInitialState)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [isWindowClicked, setIsWindowClicked] = useState(false)
   const previousStatus = useRef<TKraken['status'] | null>(null)
   const session = useSession()
@@ -48,15 +50,19 @@ export default function Kraken() {
           setKrakenData({
             remainingTime: getRemainingTime(data.startTime, data.timeline),
             status: getCurrentPhase(data.startTime, data.timeline).status,
-            timeline: data.timeline,
             startTime: data.startTime,
+            lastFeed: data.lastFeed,
+            timeline: data.timeline,
           })
+          setIsLoading(false)
         } else {
-          console.log('Document not found or deleted!')
+          console.log('Document not found!')
+          setIsLoading(false)
         }
       },
       (error) => {
         console.error('Error receiving snapshot:', error)
+        setIsLoading(false)
       }
     )
 
@@ -138,8 +144,9 @@ export default function Kraken() {
       setKrakenData({
         status: timeline[0].status,
         remainingTime: timeline[0].time,
-        timeline,
         startTime: startTime,
+        lastFeed: 0,
+        timeline,
       })
       setIsSubmitting(false)
     } catch (error) {
@@ -157,23 +164,27 @@ export default function Kraken() {
 
       await feedKraken()
 
-      setKrakenData(krakenInitialState)
+      setKrakenData((prev) => ({
+        ...prev,
+        status: 'fed',
+        lastFeed: Date.now(),
+      }))
       setIsSubmitting(false)
     } catch (error) {
       console.error('Error feeding the Kraken:', error)
     }
   }
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="bg-purple h-dvh flex items-center justify-center flex-col gap-5">
-  //       <LoaderCircle size={64} className="text-yellow animate-spin" />
-  //       <p className="font-eater tracking-widest font-bold text-4xl md:text-5xl text-yellow">
-  //         Načítám
-  //       </p>
-  //     </div>
-  //   )
-  // }
+  if (isLoading) {
+    return (
+      <div className="bg-purple h-dvh flex items-center justify-center flex-col gap-5">
+        <LoaderCircle size={64} className="text-yellow animate-spin" />
+        <p className="font-eater tracking-widest font-bold text-4xl md:text-5xl text-yellow">
+          Načítám
+        </p>
+      </div>
+    )
+  }
 
   if (!isWindowClicked) {
     return (
@@ -261,7 +272,7 @@ export default function Kraken() {
       </motion.h1>
 
       <section className="px-4 py-2 sm:py-3 lg:py-4">
-        {getKrakenJSX(krakenData.status)}
+        {getKrakenJSX(krakenData.status, krakenData.lastFeed)}
       </section>
 
       {/* 
