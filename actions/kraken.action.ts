@@ -2,7 +2,7 @@
 
 import { KRAKEN_DOC_ID, krakenStates } from '@/app/kraken/utils'
 import { getServerSession } from 'next-auth'
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+import { doc, getDoc, increment, setDoc, updateDoc } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { TKraken } from '@/types'
 
@@ -65,6 +65,7 @@ export async function feedKraken() {
       startTime: 0,
       timeline: [],
       lastFeed: Date.now(),
+      feedCounter: increment(1),
     })
   } catch (error) {
     console.error('Error feeding Kraken:', error)
@@ -78,7 +79,12 @@ export async function getKrakenStatus(): Promise<TKraken> {
     let krakenSnap = await getDoc(krakenRef)
 
     if (!krakenSnap.exists()) {
-      const defaultKraken = { startTime: 0, timeline: [], lastFeed: 0 }
+      const defaultKraken = {
+        startTime: 0,
+        timeline: [],
+        lastFeed: 0,
+        feedCounter: 0,
+      }
       await setDoc(krakenRef, defaultKraken)
       krakenSnap = await getDoc(krakenRef)
     }
@@ -94,6 +100,7 @@ export async function getKrakenStatus(): Promise<TKraken> {
         remainingTime: 0,
         startTime: kraken.startTime,
         lastFeed: kraken.lastFeed,
+        feedCounter: kraken.feedCounter,
         timeline: kraken.timeline,
       }
     }
@@ -129,6 +136,7 @@ export async function getKrakenStatus(): Promise<TKraken> {
       remainingTime: Math.floor(Math.max(0, remainingTime) / 1000),
       startTime: kraken.startTime,
       lastFeed: kraken.lastFeed,
+      feedCounter: kraken.feedCounter,
       timeline: JSON.parse(JSON.stringify(timeline)),
     }
   } catch (error) {

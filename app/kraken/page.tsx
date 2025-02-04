@@ -52,6 +52,7 @@ export default function Kraken() {
             status: getCurrentPhase(data.startTime, data.timeline).status,
             startTime: data.startTime,
             lastFeed: data.lastFeed,
+            feedCounter: data.feedCounter,
             timeline: data.timeline,
           })
           setIsLoading(false)
@@ -146,6 +147,7 @@ export default function Kraken() {
         remainingTime: timeline[0].time,
         startTime: startTime,
         lastFeed: 0,
+        feedCounter: krakenData.feedCounter,
         timeline,
       })
       setIsSubmitting(false)
@@ -177,9 +179,9 @@ export default function Kraken() {
 
   if (isLoading) {
     return (
-      <div className="bg-purple h-dvh flex items-center justify-center flex-col gap-5">
-        <LoaderCircle size={64} className="text-yellow animate-spin" />
-        <p className="font-eater tracking-widest font-bold text-4xl md:text-5xl text-yellow">
+      <div className="bg-custom_purple h-dvh flex items-center justify-center flex-col gap-5">
+        <LoaderCircle size={64} className="text-custom_yellow animate-spin" />
+        <p className="font-eater tracking-widest font-bold text-4xl md:text-5xl text-custom_yellow">
           Načítám
         </p>
       </div>
@@ -188,22 +190,41 @@ export default function Kraken() {
 
   if (!isWindowClicked) {
     return (
-      <div className="bg-purple h-dvh flex items-center justify-center flex-col gap-4 text-center max-w-3xl mx-auto">
-        <p className="font-eater tracking-widest font-bold text-xl sm:text-3xl md:text-5xl text-yellow !leading-snug rotate-3 skew-x-12 skew-y-3 bg-blue p-4 rounded-sm">
+      <div className="bg-custom_purple h-dvh flex items-center justify-center flex-col gap-4 text-center max-w-3xl mx-auto">
+        <p className="font-eater tracking-widest font-bold text-xl sm:text-3xl md:text-5xl text-custom_yellow !leading-snug rotate-3 skew-x-12 skew-y-3 bg-custom_blue p-4 rounded-sm">
           Jsi si jistý, že chceš vstoupit do těchto neprobádaných vod?
         </p>
 
         <button
           onClick={() => setIsWindowClicked(true)}
-          className="bg-emerald-700 text-white px-4 py-2 rounded-lg text-lg md:text-2xl skew-x-12 skew-y-6 -rotate-6 transition-all duration-200 hover:scale-105 hover:rotate-0"
+          className="bg-emerald-700 text-white px-4 py-2 rounded-lg text-lg md:text-2xl skew-x-12 skew-y-6 -rotate-6 transition-all duration-200 hover:scale-105 hover:rotate-0 z-40"
         >
           PUST MĚ TAM ZMRDE
         </button>
-        <button className="bg-rose-700 px-4 py-2 rounded-lg text-lg md:text-2xl -skew-x-12 -skew-y-9 rotate-6 transition-all duration-200 hover:scale-105 hover:rotate-12">
+        <button className="bg-rose-700 px-4 py-2 rounded-lg text-lg md:text-2xl -skew-x-12 -skew-y-9 rotate-6 transition-all duration-200 hover:scale-105 hover:rotate-12 z-40">
           <Link href={'/'} className="text-white">
             JDU DO PRDELE SRAČKO
           </Link>
         </button>
+
+        <motion.div
+          className="text-custom_green bg-custom_blue px-6 py-4 -skew-x-12 -skew-y-3 font-mynerve tracking-widest mt-10 space-y-2 rounded-2xl"
+          animate={{ rotate: [20, 0, -20], scale: [1, 1.02, 1] }}
+          transition={{
+            repeat: Infinity,
+            repeatType: 'mirror',
+            duration: 1,
+            ease: 'linear',
+          }}
+        >
+          <p className="sm:text-3xl md:text-5xl">
+            Kraken už žral{' '}
+            <span className="text-custom_orange font-bold">
+              {krakenData.feedCounter}
+            </span>
+            x
+          </p>
+        </motion.div>
       </div>
     )
   }
@@ -241,7 +262,9 @@ export default function Kraken() {
       >
         <Image
           src={
-            krakenData.status === 'very_angry' ? '/kraken.gif' : '/kraken.png'
+            krakenData.status === 'very_angry'
+              ? '/images/kraken.gif'
+              : '/images/kraken.png'
           }
           alt="kraken"
           width={682}
@@ -283,7 +306,7 @@ export default function Kraken() {
           {krakenData.status === 'fed' && (
             <button
               onClick={handleStart}
-              className={`bg-purple text-white px-6 py-2 rounded font-bold text-xl transition-all duration-300 ${
+              className={`bg-custom_purple text-white px-6 py-2 rounded font-bold text-xl transition-all duration-300 ${
                 isSubmitting
                   ? 'opacity-50 cursor-not-allowed'
                   : 'hover:scale-105'
@@ -296,7 +319,7 @@ export default function Kraken() {
           {krakenData.status !== 'fed' && (
             <button
               onClick={handleFeed}
-              className={`bg-blue text-white px-6 py-2 rounded font-bold text-xl transition-all duration-300 ${
+              className={`bg-custom_blue text-white px-6 py-2 rounded font-bold text-xl transition-all duration-300 ${
                 isSubmitting
                   ? 'opacity-50 cursor-not-allowed'
                   : 'hover:scale-105'

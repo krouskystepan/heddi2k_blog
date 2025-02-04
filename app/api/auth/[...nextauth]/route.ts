@@ -15,17 +15,15 @@ const options = {
         if (!credentials?.username || !credentials?.password) return null
 
         const admin = await getAdmin({ username: credentials.username })
-
         if (!admin) return null
 
         const isPasswordValid = await bcrypt.compare(
           credentials.password,
           admin.password
         )
-
         if (!isPasswordValid) return null
 
-        return { id: admin.id, name: admin.username }
+        return { id: admin.username, name: admin.username }
       },
     }),
   ],

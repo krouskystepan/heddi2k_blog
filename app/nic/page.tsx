@@ -5,16 +5,16 @@ import Link from 'next/link'
 
 export default function Nic() {
   return (
-    <section className="h-screen grid items-center justify-center bg-purple">
+    <section className="h-screen grid items-center justify-center bg-custom_purple">
       <Link
         href="/"
         className="text-center text-2xl font-bold text-white font-eater"
       >
         ZPÁTKY
       </Link>
-      <div className="h-screen text-center flex items-center justify-around bg-blue flex-col overflow-hidden md:justify-center md:flex-row">
+      <div className="h-screen text-center flex items-center justify-around bg-custom_blue flex-col overflow-hidden md:justify-center md:flex-row">
         <motion.h1
-          className="text-4xl font-bold text-orange font-eater"
+          className="text-4xl font-bold text-custom_orange font-eater"
           animate={{ rotate: 360 }}
           transition={{
             repeat: Infinity,
@@ -25,7 +25,7 @@ export default function Nic() {
           TADY NIC NENI
         </motion.h1>
         <motion.h1
-          className="text-6xl font-bold text-green font-mynerve"
+          className="text-6xl font-bold text-custom_green font-mynerve"
           animate={{ rotate: 360 }}
           transition={{
             repeat: Infinity,
@@ -37,7 +37,7 @@ export default function Nic() {
           TADY NIC NENI
         </motion.h1>
         <motion.h1
-          className="text-7xl font-bold text-yellow font-creepster"
+          className="text-7xl font-bold text-custom_yellow font-creepster"
           animate={{ rotate: 360 }}
           transition={{
             repeat: Infinity,

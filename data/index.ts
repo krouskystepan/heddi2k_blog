@@ -1,7 +1,7 @@
 export const INFO = [
   {
     media: {
-      source: '/photo1.webp',
+      source: '/images/photo1.webp',
       type: 'image',
     },
     title: 'Fešák',
@@ -9,7 +9,7 @@ export const INFO = [
   },
   {
     media: {
-      source: '/photo2.webp',
+      source: '/images/photo2.webp',
       type: 'image',
     },
     title: 'Byznys',
@@ -17,7 +17,7 @@ export const INFO = [
   },
   {
     media: {
-      source: '/video1.mp4',
+      source: '/videos/video1.mp4',
       type: 'video',
     },
     title: 'Kámoši',

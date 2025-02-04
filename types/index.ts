@@ -31,5 +31,6 @@ export type TKraken = {
   startTime: number
   remainingTime: number
   lastFeed: number
+  feedCounter: number
   timeline: TKrakenPhase[]
 }

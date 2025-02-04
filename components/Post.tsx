@@ -99,7 +99,7 @@ export default function Post({
           className="w-full h-auto object-cover rounded-lg shadow-lg"
         />
       )}
-      <p className="font-mynerve my-2 text-red text-2xl font-bold hover:text-blue-500 break-words">
+      <p className="font-mynerve my-2 text-custom_red text-2xl font-bold break-words">
         {description}
       </p>
       <section className="flex justify-between items-center">

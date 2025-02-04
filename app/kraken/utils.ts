@@ -15,7 +15,7 @@ export const hasPermsForLogs = (session: any) => {
 
 // 5 Phases of Kraken (plus fed and very_angry = no time)
 const MINUTE = 60
-const MIN_KRAKEN_PHASE_TIME = MINUTE * 20
+const MIN_KRAKEN_PHASE_TIME = MINUTE * 15
 const MAX_KRAKEN_PHASE_TIME = MINUTE * 90
 
 // Do not change this value
@@ -35,6 +35,7 @@ export const krakenInitialState: TKraken = {
   remainingTime: 0,
   startTime: 0,
   lastFeed: 0,
+  feedCounter: 0,
   timeline: [],
 }
 

@@ -10,5 +10,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  return <main className="bg-purple !select-none ">{children}</main>
+  return <main className="bg-custom_purple !select-none ">{children}</main>
 }
