@@ -208,7 +208,7 @@ export default function Kraken() {
         </button>
 
         <motion.div
-          className="text-custom_green bg-custom_blue px-6 py-4 -skew-x-12 -skew-y-3 font-mynerve tracking-widest mt-10 space-y-2 rounded-2xl"
+          className="text-custom_green bg-custom_blue px-4 py-2 md:px-6 md:py-4 -skew-x-12 -skew-y-3 font-mynerve tracking-widest mt-8 sm:mt-10 space-y-2 rounded-2xl"
           animate={{ rotate: [20, 0, -20], scale: [1, 1.02, 1] }}
           transition={{
             repeat: Infinity,
@@ -217,7 +217,7 @@ export default function Kraken() {
             ease: 'linear',
           }}
         >
-          <p className="sm:text-3xl md:text-5xl">
+          <p className="text-2xl md:text-5xl">
             Kraken už žral{' '}
             <span className="text-custom_orange font-bold">
               {krakenData.feedCounter}
