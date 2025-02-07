@@ -295,7 +295,7 @@ export default function Kraken() {
       </motion.h1>
 
       <section className="px-4 py-2 sm:py-3 lg:py-4">
-        {getKrakenJSX(krakenData.status, krakenData.lastFeed)}
+        {getKrakenJSX(krakenData.status)}
       </section>
 
       {/* 
