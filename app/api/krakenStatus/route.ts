@@ -5,10 +5,15 @@ export const dynamic = 'force-dynamic'
 export async function GET() {
   const kraken = await getKrakenStatus()
 
+  const lastFeedDate = new Date(kraken.lastFeed).toLocaleDateString('cs-CZ', {
+    day: 'numeric',
+    month: 'numeric',
+  })
+
   let apiMessage = ''
   switch (kraken.status) {
     case 'fed':
-      apiMessage = 'Kraken spí a nemá hlad.'
+      apiMessage = `Kraken spí a nemá hlad. Kraken byl naposledy nakrmen ${lastFeedDate}!`
       break
     case 'full':
       apiMessage = 'Kraken je probuzený, ale ještě není hladový.'
