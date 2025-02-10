@@ -9,7 +9,13 @@ export type TPost = {
   description: string
   imageLink: string
   createdAt: Date
-  updatedAt: Date
+}
+
+export type TStatement = {
+  id: string
+  title: string
+  description: string
+  createdAt: Date
 }
 
 type TStatus =

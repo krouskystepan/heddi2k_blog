@@ -98,7 +98,7 @@ export const updatePostById = async (
     await updateDoc(postRef, { ...data, updatedAt: new Date().toISOString() })
     console.log(`Post '${id}' updated`)
 
-    revalidatePath('/')
+    revalidatePath('/perlicky')
   } catch (error) {
     console.error('Error updating post:', error)
   }

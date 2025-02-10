@@ -23,6 +23,15 @@ export default async function Navbar() {
           </Link>
         </div>
       </section>
+
+      <section className="bg-custom_blue py-2 w-full">
+        <Link
+          href={'/perlicky'}
+          className="text-xl md:text-4xl text-blue-400 font-eater font-bold underline tracking-widest"
+        >
+          POLICEJNÍ PERLIČKY PUSINKY
+        </Link>
+      </section>
       <section className="space-y-3">
         <h1 className="font-bold">
           <span className="font-eater text-5xl text-custom_yellow">

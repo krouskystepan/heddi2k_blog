@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { deletePost } from '@/actions/post.action'
 import { Pen, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { TPost } from '@/types'
 
 export default function Post({
   id,
@@ -13,14 +14,7 @@ export default function Post({
   imageLink,
   createdAt,
   isLoggedIn,
-}: {
-  id: string
-  title: string
-  description: string
-  imageLink: string
-  createdAt: Date
-  isLoggedIn: boolean
-}) {
+}: TPost & { isLoggedIn: boolean }) {
   const router = useRouter()
   const [randomStyles, setRandomStyles] = useState({
     rotate: 0,
@@ -114,7 +108,7 @@ export default function Post({
               </button>
               <button
                 className="bg-amber-600 text-white rounded-md aspect-square flex justify-center items-center p-1"
-                onClick={() => router.push(`/admin/${id}`)}
+                onClick={() => router.push(`/admin/lepik/${id}`)}
               >
                 <Pen size={20} />
               </button>
