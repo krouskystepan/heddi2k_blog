@@ -168,3 +168,24 @@ export function formatTime(seconds: number): string {
 
   return parts.join(' ')
 }
+
+export function timeSince(
+  date: Date,
+  suffixes = { M: 'M', d: 'd', h: 'h', m: 'm', s: 's' }
+): string {
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffSeconds = Math.floor(diffMs / 1000)
+
+  if (diffSeconds < 60) return `${diffSeconds}${suffixes.s}`
+
+  const months = Math.floor(diffMs / 2629800000)
+  const days = Math.floor((diffMs % 2629800000) / 86400000)
+  const hours = Math.floor((diffMs % 86400000) / 3600000)
+  const minutes = Math.floor((diffMs % 3600000) / 60000)
+
+  if (months > 0) return `${months}${suffixes.M} ${days}${suffixes.d}`.trim()
+  if (days > 0) return `${days}${suffixes.d} ${hours}${suffixes.h}`.trim()
+  if (hours > 0) return `${hours}${suffixes.h} ${minutes}${suffixes.m}`.trim()
+  return `${minutes}${suffixes.m}`
+}

@@ -1,19 +1,19 @@
 import { getKrakenStatus } from '@/actions/kraken.action'
+import { timeSince } from '@/app/kraken/utils'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const kraken = await getKrakenStatus()
 
-  const lastFeedDate = new Date(kraken.lastFeed).toLocaleDateString('cs-CZ', {
-    day: 'numeric',
-    month: 'numeric',
-  })
+  const lastFeedDate = new Date(kraken.lastFeed)
 
   let apiMessage = ''
   switch (kraken.status) {
     case 'fed':
-      apiMessage = `Kraken spí a nemá hlad. Kraken byl naposledy nakrmen ${lastFeedDate}!`
+      apiMessage = `Kraken spí a nemá hlad. Kraken byl naposledy nakrmen před ${timeSince(
+        lastFeedDate
+      )}!`
       break
     case 'full':
       apiMessage = 'Kraken je probuzený, ale ještě není hladový.'
