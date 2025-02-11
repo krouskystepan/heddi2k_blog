@@ -52,3 +52,44 @@ export async function createAdmin({
     console.error('Error creating admin:', error)
   }
 }
+
+export async function changePassword({
+  username,
+  oldPassword,
+  newPassword,
+}: {
+  username: string
+  oldPassword: string
+  newPassword: string
+}) {
+  try {
+    const session = await getServerSession()
+    if (!session?.user?.name) {
+      throw new Error('Not logged in')
+    }
+
+    const adminRef = doc(db, 'admins', username)
+    const adminSnap = await getDoc(adminRef)
+
+    if (!adminSnap.exists()) {
+      throw new Error('Admin not found')
+    }
+
+    const admin = adminSnap.data()
+    const passwordMatch = await bcrypt.compare(oldPassword, admin.password)
+    console.log('adminSnap', oldPassword, admin.password, passwordMatch)
+
+    if (!passwordMatch) {
+      throw new Error('Old password is incorrect')
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10)
+
+    await setDoc(adminRef, { username, password: hashedPassword })
+    console.log(`Password for ${username} changed`)
+
+    revalidatePath('/')
+  } catch (error) {
+    console.error('Error changing password:', error)
+  }
+}
