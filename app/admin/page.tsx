@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import React, { Fragment } from 'react'
 
 export default function AdminPage() {
   return (
@@ -26,14 +25,9 @@ function NavButton({
   return (
     <Link
       href={href}
-      className={`bg-custom_yellow w-40 sm:w-52 md:w-64 h-24 flex justify-center items-center rounded-lg text-2xl text-center ${extraClassNames}`}
+      className={`bg-custom_yellow w-40 sm:w-52 md:w-64 h-24 flex justify-center items-center rounded-lg text-2xl text-center whitespace-pre-line ${extraClassNames}`}
     >
-      {text.split('\n').map((line, index) => (
-        <Fragment key={index}>
-          {line}
-          <br />
-        </Fragment>
-      ))}
+      {text}
     </Link>
   )
 }
