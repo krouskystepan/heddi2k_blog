@@ -4,6 +4,7 @@ import { deleteStatement } from '@/actions/statement.action'
 import { TStatement } from '@/types'
 import { X, Pen } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { Fragment } from 'react'
 
 export default function Statement({
   id,
@@ -22,6 +23,8 @@ export default function Statement({
     }
   }
 
+  console.log(JSON.stringify(description, null, 2))
+
   return (
     <article className="odd:bg-custom_green even:bg-custom_yellow py-2 px-4">
       <div className="max-w-2xl mx-auto">
@@ -30,8 +33,14 @@ export default function Statement({
         </h3>
 
         <p className="text-custom_purple font-semibold text-lg md:text-xl">
-          {description}
+          {description.split('\n').map((line, index) => (
+            <Fragment key={index}>
+              {line}
+              <br />
+            </Fragment>
+          ))}
         </p>
+
         <div className="flex justify-between mt-2">
           <div className="flex gap-2">
             {isLoggedIn && (
