@@ -23,7 +23,7 @@ export default function Statement({
   }
 
   return (
-    <article className="odd:bg-custom_green even:bg-custom_yellow py-2 px-4">
+    <article className="odd:bg-custom_green even:bg-custom_yellow py-4 px-4">
       <div className="max-w-2xl mx-auto">
         <h3 className="text-custom_red text-2xl md:text-4xl font-extrabold">
           {title}

@@ -1,7 +1,9 @@
 import { getAllStatements } from '@/actions/statement.action'
 import Statement from './Statement'
+import { getServerSession } from 'next-auth'
 
 export default async function Statements() {
+  const session = await getServerSession()
   const statements = await getAllStatements()
 
   return (
@@ -20,7 +22,7 @@ export default async function Statements() {
             title={item.title}
             description={item.description}
             createdAt={item.createdAt}
-            isLoggedIn={true}
+            isLoggedIn={!!session?.user?.name}
           />
         ))}
 
