@@ -3,6 +3,8 @@ import fs from 'fs'
 import path from 'path'
 import ImageModal from '@/components/ImageModal'
 
+export const dynamic = 'force-static'
+
 // Helper: load filenames from directory inside /public
 function getFilesFromPublicDir(dir: string, exts: string[]): string[] {
   const fullPath = path.join(process.cwd(), 'public', dir)
