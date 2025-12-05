@@ -32,6 +32,15 @@ export default async function Navbar() {
           POLICEJNÍ PERLIČKY PUSINKY
         </Link>
       </section>
+
+      <section className="bg-custom_blue w-full py-2">
+        <Link
+          href={'/gallery'}
+          className="text-xl md:text-4xl text-emerald-400 font-eater font-bold underline"
+        >
+          GALLERY
+        </Link>
+      </section>
       <section className="space-y-3">
         <h1 className="font-bold">
           <span className="font-eater text-5xl text-custom_yellow">

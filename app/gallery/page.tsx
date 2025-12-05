@@ -39,15 +39,6 @@ export default function GalleryPage() {
             GALLERY
           </h2>
           <main className="flex flex-col items-center">
-            <div className="flex gap-12 items-center max-w-2xl mx-auto">
-              <Link
-                href="/"
-                className="text-xl md:text-3xl text-custom_yellow py-2 text-center underline underline-offset-4 font-bold"
-              >
-                ZPÁTKY PRYČ
-              </Link>
-            </div>
-
             <h2 className="mt-4 md:mt-10 mb-2 text-lg md:text-4xl text-emerald-400 font-mono font-bold tracking-wide text-center">
               OBRAZKY
             </h2>
