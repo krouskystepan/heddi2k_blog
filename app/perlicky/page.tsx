@@ -11,12 +11,12 @@ export default function PerlickyPage() {
         >
           ZPATKY PRYC
         </Link>
-        <Link
+        {/* <Link
           href={'/admin'}
           className="text-xl md:text-3xl text-custom_orange py-2 text-center underline underline-offset-4 font-bold"
         >
           ADMIN PANEL
-        </Link>
+        </Link> */}
       </div>
 
       <Statements />

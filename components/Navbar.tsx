@@ -4,16 +4,16 @@ import React from 'react'
 export default async function Navbar() {
   return (
     <nav className="text-center space-y-3 pb-4 bg-custom_purple">
-      <section className="bg-custom_blue w-full py-1">
+      {/* <section className="bg-custom_blue w-full py-1">
         <Link
           href={'/admin'}
           className="text-xl text-custom_yellow font-eater underline"
         >
           ADMIN PANEL PIČO
         </Link>
-      </section>
+      </section> */}
 
-      <section className="overflow-hidden">
+      {/* <section className="overflow-hidden">
         <div className="bg-custom_blue w-full py-1 -rotate-1">
           <Link
             href={'/kraken'}
@@ -22,7 +22,7 @@ export default async function Navbar() {
             KRAKEN
           </Link>
         </div>
-      </section>
+      </section> */}
 
       <section className="bg-custom_blue py-2 w-full">
         <Link
